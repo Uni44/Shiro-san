@@ -1,0 +1,72 @@
+[
+    {
+        "user_id": 269549755850293249,
+        "age": 2119,
+        "permanent": "False",
+        "date": "2021-06-14",
+        "active": "False"
+    },
+    {
+        "user_id": 269549755850293249,
+        "age": 2086,
+        "permanent": "False",
+        "date": "2021-06-15",
+        "active": "True"
+    },
+    {
+        "user_id": 594638372996251655,
+        "age": 2116,
+        "permanent": "True",
+        "date": "2021-06-24",
+        "active": "True"
+    },
+    {
+        "user_id": 755165782195044474,
+        "age": 2025,
+        "permanent": "False",
+        "date": "2021-07-04",
+        "active": "False"
+    },
+    {
+        "user_id": 839532456323448872,
+        "age": 2024,
+        "permanent": "True",
+        "date": "2021-07-14",
+        "active": "True"
+    },
+    {
+        "user_id": 755165782195044474,
+        "age": 2092,
+        "permanent": "False",
+        "date": "2021-07-16",
+        "active": "True"
+    },
+    {
+        "user_id": 858750775705600060,
+        "age": 2053,
+        "permanent": "True",
+        "date": "2021-07-21",
+        "active": "True"
+    },
+    {
+        "user_id": 796304879374565396,
+        "age": 2073,
+        "permanent": "False",
+        "date": "2021-08-02",
+        "active": "True"
+    },
+    {
+        "user_id": 725202047955238974,
+        "age": 2079,
+        "permanent": "True",
+        "date": "2021-08-27",
+        "active": "True"
+    },
+    {
+        "user_id": 771139010541387846,
+        "age": 2076,
+        "permanent": "True",
+        "date": "2021-08-28",
+        "active": "True"
+    }
+]

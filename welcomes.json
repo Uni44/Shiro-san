@@ -1,0 +1,47 @@
+[
+    {
+        "channel_id": 849063541847228456,
+        "guild_id": 848833707426578472,
+        "active": "False"
+    },
+    {
+        "channel_id": 849063541847228456,
+        "guild_id": 848833707426578472,
+        "active": "True"
+    },
+    {
+        "channel_id": 848276717814808616,
+        "guild_id": 809081748955725855,
+        "active": "True"
+    },
+    {
+        "channel_id": 775525471134810112,
+        "guild_id": 775485232626925618,
+        "active": "False"
+    },
+    {
+        "channel_id": 849456367520448532,
+        "guild_id": 831285837983514624,
+        "active": "True"
+    },
+    {
+        "channel_id": 848696495590080553,
+        "guild_id": 848690154336026644,
+        "active": "True"
+    },
+    {
+        "channel_id": 758441773558530130,
+        "guild_id": 758432809642623031,
+        "active": "True"
+    },
+    {
+        "channel_id": 775525471134810112,
+        "guild_id": 775485232626925618,
+        "active": "True"
+    },
+    {
+        "channel_id": 853642492800794634,
+        "guild_id": 853638173850599456,
+        "active": "True"
+    }
+]
