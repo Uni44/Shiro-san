@@ -98,6 +98,8 @@ async def ex(nombre, channelname, ctx, bot):
 
           embed.add_field(name="Anti invitaciones", value="<:admtag:860610530489663518> `sh!anti-invite-enable` \n <:admtag:860610530489663518> `sh!anti-invite-disable` \n <:admtag:860610530489663518> `sh!anti-invite-ignore-channel-add` \n <:admtag:860610530489663518> `sh!anti-invite-ignore-channel-remove` \n <:admtag:860610530489663518> `sh!anti-invite-ignore-channel-list`")
 
+          embed.add_field(name="Chat IA (<:dev:853161030053527564> BETA)", value="<:admtag:860610530489663518> `sh!chat-ia-enable` \n <:admtag:860610530489663518> `sh!chat-ia-disable`")
+
           embed.add_field(name=":warning: OTA Ban global", value="<:admtag:860610530489663518> `sh!ota-global-ban` \n <:modtag:860610530578399293> `sh!ota-global-ban-info` (Usuario) \n <:modtag:860610530578399293> `sh!ota-global-ban-report` (Usuario, Información)")
 
           embed.add_field(name="Otro", value="`sh!invite` \n `sh!vote` \n `sh!report`")

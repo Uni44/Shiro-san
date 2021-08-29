@@ -32,7 +32,7 @@ bot.remove_command("help")
 # Let us Know when the bot is ready and has started
 @bot.event
 async def on_ready():
-    #await sql_create_db()
+    await sql_create_db()
     print("Bot is ready")
     await minutework()
 
@@ -1221,6 +1221,8 @@ async def sql_create_db():
   c.execute("""CREATE TABLE IF NOT EXISTS global_ban_ops (guild_id TEXT, option TEXT)""")
   c.execute("""CREATE TABLE IF NOT EXISTS responses_messages (guild_id TEXT, key TEXT, respuesta TEXT, veces TEXT, try TEXT, id TEXT)""")
 
+  c.execute("""CREATE TABLE IF NOT EXISTS chat_ia_ops (guild_id TEXT, option TEXT)""")
+
   conn.commit()
 
   await dbDisconnect()
@@ -2150,6 +2152,30 @@ async def level_channel_list(ctx):
       await ctx.send(texto)
     #conn.commit()
 
+@bot.command(name = "chat-ia-enable")
+async def chat_ia_enable(ctx):
+  if permisosCheck(ctx.author, 2):
+    items = await QueryGET("SELECT * FROM chat_ia_ops WHERE guild_id = '" + str(ctx.guild.id) + "'")
+
+    if len(items) == 0:
+      await QueryEX("INSERT INTO chat_ia_ops VALUES ('" + str(ctx.guild.id) + "', 'enable')")
+      await ctx.send("Listo. Las respuestas con IA fueron activadas.")
+    else:
+      await QueryEX("UPDATE chat_ia_ops SET option = 'enable' WHERE guild_id = '" + str(ctx.guild.id) + "'")
+      await ctx.send("Listo. Las respuestas con IA fueron activadas.")
+
+@bot.command(name = "chat-ia-disable")
+async def chat_ia_disable(ctx):
+  if permisosCheck(ctx.author, 2):
+    items = await QueryGET("SELECT * FROM chat_ia_ops WHERE guild_id = '" + str(ctx.guild.id) + "'")
+
+    if len(items) == 0:
+      await QueryEX("INSERT INTO chat_ia_ops VALUES ('" + str(ctx.guild.id) + "', 'disable')")
+      await ctx.send("Listo. Las respuestas con IA fueron desactivadas.")
+    else:
+      await QueryEX("UPDATE chat_ia_ops SET option = 'disable' WHERE guild_id = '" + str(ctx.guild.id) + "'")
+      await ctx.send("Listo. Las respuestas con IA fueron desactivadas.")
+
 ###UTILERIA
 
 @bot.event
@@ -2589,7 +2615,7 @@ async def on_message(message):
 #    if message.author.guild.id != 714556967347159101:
 #        bypass = True
 
-    if message.content.lower().find(':') >= 0:
+    if message.content.lower().find('<:') >= 0:
       bypass = True
 
     if message.content.lower().find('https://') >= 0:
@@ -2611,6 +2637,41 @@ async def on_message(message):
                       texto2,
                       ]
                     chatbot.train(nuevo)
+      else:
+        if not "@everyone" in message.content and not "@here" in message.content:
+          #modulo chattbot
+          await message.channel.trigger_typing()
+        
+          continuar_mencion_normal = True
+
+          mensaje_puro = await limpiarTextoDiscord(message.content)
+
+          if len(mensaje_puro) > 0:
+            items = await QueryGET("SELECT * FROM chat_ia_ops WHERE guild_id = '" + str(message.guild.id) + "' AND option = 'disable'")
+
+            if len(items) == 0:
+              respuesta = chatbot.get_response(mensaje_puro)
+
+              await message.channel.send("<@" + str(message.author.id) + "> " + str(respuesta))
+              continuar_mencion_normal = False
+
+          #mencion normal
+
+          if continuar_mencion_normal:
+            ina = random.randint(0, 5)
+
+            if ina == 0:
+              await message.channel.send("<@" + str(message.author.id) + "> Hola! Puedes usar `sh!help` para la lista de comandos.")
+            if ina == 1:
+              await message.channel.send("<@" + str(message.author.id) + "> Puedes usar `sh!help` para la lista de comandos.")
+            if ina == 2:
+              await message.channel.send("<@" + str(message.author.id) + "> Hola :D para la lista de comandos usa `sh!help`")
+            if ina == 3:
+              await message.channel.send("<@" + str(message.author.id) + "> Mi prefijo es `sh!`")
+            if ina == 4:
+              await message.channel.send("<@" + str(message.author.id) + "> Buenas, Mi prefijo es `sh!`")
+            if ina == 5:
+              await message.channel.send("<@" + str(message.author.id) + "> Hola! Puedes usar `sh!help` para la lista de comandos.")
 
 #      if message.content.lower() == ('otaku army'):
 #        if AntiSpam("otaku_army", 3):
@@ -2729,6 +2790,8 @@ from  chatterbot.trainers import ChatterBotCorpusTrainer
 from  chatterbot.trainers import ListTrainer
 
 chatbot = ChatBot("Kanna",
+  storage_adapter='chatterbot.storage.MongoDatabaseAdapter',
+
   trainer='chatterbot.trainers.ListTrainer',
   #Un Logic_adapter es una clase que devuelve una respuesta ante una pregunta dada. 
     #Se pueden usar tantos logic_adapters como se quiera
@@ -2743,7 +2806,7 @@ chatbot = ChatBot("Kanna",
         },
         {
             'import_path': 'chatterbot.logic.LowConfidenceAdapter',
-            'threshold': 0.3,
+            'threshold': 0.5,
             'default_response': 'Disculpa, no te he entendido bien. ¿Puedes ser más específico?.'
         }
         #{
@@ -2755,6 +2818,7 @@ chatbot = ChatBot("Kanna",
     preprocessors=[
         'chatterbot.preprocessors.clean_whitespace'
     ],
+    database_uri='mongodb+srv://root:ascent@ota-dc-chatbot.f42wr.mongodb.net/dc-ia-chatbot?retryWrites=true&w=majority'
 )
 
 nombre = [
@@ -2767,10 +2831,16 @@ creador = [
     "Me creo Uni44",
 ]
 
-if True: #pre entrenar para algunos datos
+genero = [
+    "Sos chica?",
+    "Si soy chica",
+]
+
+if False: #pre entrenar para algunos datos
   chatbot.set_trainer(ListTrainer)
   chatbot.train(nombre)
   chatbot.train(creador)
+  chatbot.train(genero)
 
 chatbot.set_trainer(ChatterBotCorpusTrainer)
 chatbot.train("chatterbot.corpus.spanish")
@@ -2812,6 +2882,3 @@ async def limpiarTextoDiscord(texto: str):
 
 # Run our bot
 bot.run(str(TOKEN)) # Make sure you paste the CORRECT token in the "./data/Token.txt" file
-
-#BASURA
-
