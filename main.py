@@ -2818,7 +2818,7 @@ chatbot = ChatBot("Kanna",
     preprocessors=[
         'chatterbot.preprocessors.clean_whitespace'
     ],
-    database_uri='mongodb+srv://root:ascent@ota-dc-chatbot.f42wr.mongodb.net/dc-ia-chatbot?retryWrites=true&w=majority'
+    database_uri= os.environ['ia_database_uri']
 )
 
 nombre = [
