@@ -62,7 +62,9 @@ async def minutework():
             guild = bot.get_guild(int(item[0]))
             role = get(guild.roles, id=int(items22[0][1]))
             miembro = guild.get_member(int(item[1]))
-            await miembro.remove_roles(role)
+
+            if miembro:
+              await miembro.remove_roles(role)
           
           #c.execute("DELETE FROM mute_temps WHERE guild_id = '" + item[0] + "' AND user_id = '" + item[1] + "'")
           await QueryEX("DELETE FROM mute_temps WHERE guild_id = '" + item[0] + "' AND user_id = '" + item[1] + "'")
