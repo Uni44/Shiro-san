@@ -807,7 +807,7 @@ async def muerte(ctx):
     #responses whit json
     with open('dead_responses.json') as file44:
       data44 = json.load(file44)
-      ina33 = random.randint(0, len(data) - 1)
+      ina33 = random.randint(0, len(data44) - 1)
       await ctx.send("<@" + str(ctx.author.id) + "> " + data44[ina33]['respuesta'] + " " + str(ina))
           
     permanente = "False"

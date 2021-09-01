@@ -11,7 +11,7 @@
         "age": 2086,
         "permanent": "False",
         "date": "2021-06-15",
-        "active": "True"
+        "active": "False"
     },
     {
         "user_id": 594638372996251655,
@@ -81,6 +81,41 @@
         "age": 2107,
         "permanent": "True",
         "date": "2021-08-29",
+        "active": "True"
+    },
+    {
+        "user_id": 711379497374711816,
+        "age": 2043,
+        "permanent": "False",
+        "date": "2021-09-01",
+        "active": "True"
+    },
+    {
+        "user_id": 829567526219808808,
+        "age": 2047,
+        "permanent": "True",
+        "date": "2021-09-01",
+        "active": "True"
+    },
+    {
+        "user_id": 666852704953434133,
+        "age": 2094,
+        "permanent": "True",
+        "date": "2021-09-01",
+        "active": "True"
+    },
+    {
+        "user_id": 269549755850293249,
+        "age": 2086,
+        "permanent": "True",
+        "date": "2021-09-01",
+        "active": "True"
+    },
+    {
+        "user_id": 713864363274141828,
+        "age": 2044,
+        "permanent": "False",
+        "date": "2021-09-01",
         "active": "True"
     }
 ]
