@@ -1,6 +1,8 @@
 import discord
 import os
 
+from async_repair import *
+
 import cmd_embed
 import cmd_say
 import cmd_sayto
@@ -2652,7 +2654,22 @@ async def on_message(message):
             items = await QueryGET("SELECT * FROM chat_ia_ops WHERE guild_id = '" + str(message.guild.id) + "' AND option = 'disable'")
 
             if len(items) == 0:
-              respuesta = chatbot.get_response(mensaje_puro)
+              respuesta = "**BOT INTERNAL** N/A"
+
+              @force_async
+              def res():
+                respuesta = chatbot.get_response(mensaje_puro)
+                return respuesta
+
+              futures = list(map(lambda x: res(), range(1)))
+              restaa = await asyncio.gather(*futures)
+              restaa = str(restaa)[17 : len(restaa) -3 : ]
+              respuesta = restaa
+
+              if respuesta == "**BOT INTERNAL** N/A":
+                respuesta = "auch encontre un bug en mi, ayuda"
+
+              #respuesta = chatbot.get_response(mensaje_puro)
 
               await message.channel.send("<@" + str(message.author.id) + "> " + str(respuesta))
               continuar_mencion_normal = False
