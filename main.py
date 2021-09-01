@@ -2837,6 +2837,9 @@ chatbot = ChatBot("Kanna",
     preprocessors=[
         'chatterbot.preprocessors.clean_whitespace'
     ],
+    filters=[
+        'chatterbot.filters.RepetitiveResponseFilter'
+    ],
     database_uri= os.environ['ia_database_uri']
 )
 
