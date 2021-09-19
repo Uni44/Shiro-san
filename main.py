@@ -1048,6 +1048,10 @@ async def setmuterol(ctx, role: discord.Role):
 @bot.command(name = "mute")
 async def mute(ctx, miembro: discord.Member):
   if permisosCheck(ctx.author, 1):
+    if miembro == ctx.author:
+      await ctx.send("Te vas a automutear?")
+      return
+    
     #c.execute ("SELECT * FROM muterole WHERE guild_id = '" + str(ctx.guild.id) + "'")
     #items = c.fetchall()
     items = await QueryGET("SELECT * FROM muterole WHERE guild_id = '" + str(ctx.guild.id) + "'")
@@ -1104,6 +1108,10 @@ async def unmute(ctx, miembro: discord.Member):
 @bot.command(name = "tempmute")
 async def tempmute(ctx, miembro: discord.Member, tiempo, manual: bool = True):
   if not manual or permisosCheck(ctx.author, 3):
+    if miembro == ctx.author:
+      await ctx.send("Te vas a automutear?")
+      return
+    
     time_convert = {"s": 1, "m": 60, "h": 3600, "d": 86400}
     
     new_tiempo = 0
@@ -1501,7 +1509,10 @@ async def log_channel_clear(ctx):
 @bot.command(name = "warn")
 async def warn(ctx, miembro: discord.Member, razon: str = "Sin razón", manual: bool = True):
   if manual and permisosCheck(ctx.author, 1):
-
+    if miembro == ctx.author:
+      await ctx.send("Te vas a autowarnear?")
+      return
+    
     #c.execute ("SELECT * FROM warns WHERE guild_id = '" + str(ctx.guild.id) + "' AND user_id = '" + str(miembro.id) + "'")
     #items = c.fetchall()
     items = await QueryGET("SELECT * FROM warns WHERE guild_id = '" + str(ctx.guild.id) + "' AND user_id = '" + str(miembro.id) + "'")
