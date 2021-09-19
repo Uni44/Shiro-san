@@ -683,7 +683,7 @@ async def vote(ctx):
   title = 'Me ayudarias un montón si votas por mí <:sataok:848337914765115412>.',
   colour = discord.Colour.from_rgb(219, 0, 255)
   )
-  embed.description = "[Top.gg](https://top.gg/bot/848797506694414346/vote)\n[Cooky List](https://cookylist.glitch.me/bots/like/848797506694414346)\n[Aura Bot List](https://auralist.ml/bots/848797506694414346/vote)\n[Astrabots](https://astrabots.xyz/bot/848797506694414346/vote)\n[Bladebotlist](https://bladebotlist.xyz/bot/848797506694414346/vote)\n[DisBotlist](https://disbotlist.xyz/bot/848797506694414346/vote)\n[Upcord List](https://list.upcord.tk/bot/848797506694414346/vote)"
+  embed.description = "[Top.gg](https://top.gg/bot/848797506694414346/vote)\n[Aura Bot List](https://auralist.ml/bots/848797506694414346/vote)\n[Astrabots](https://astrabots.xyz/bot/848797506694414346/vote)\n[Bladebotlist](https://bladebotlist.xyz/bot/848797506694414346/vote)\n[DisBotlist](https://disbotlist.xyz/bot/848797506694414346/vote)\n[Upcord List](https://list.upcord.tk/bot/848797506694414346/vote)"
   embed.set_thumbnail(url=bot.user.avatar_url)
   await ctx.author.send(embed=embed)
 
