@@ -63,7 +63,7 @@ async def ex(nombre, channelname, ctx, bot):
             embed.add_field(name="🎲 Tirare los dados", value="sh!dados")
             embed.add_field(name="📷 Avatar (Miembro)", value="sh!avatar")
             embed.add_field(name="📷 Icono del server", value="sh!servericon")
-            embed.add_field(name="🍌 Meme alazar", value="sh!meme")
+            #embed.add_field(name="🍌 Meme alazar", value="sh!meme")
             embed.add_field(name="🔒 Comandos de privadas", value="sh!voice-help")
             embed.add_field(name="💻 Lista de comandos", value="sh!help")
             embed.add_field(name="💻 Lista de comandos de administración y moderación <:modtag:860610530578399293>", 

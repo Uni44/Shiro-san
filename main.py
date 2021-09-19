@@ -727,7 +727,8 @@ async def pregunta(ctx, texto: str = "", texto2: str = ""):
             ina = random.randint(0, len(data) - 1)
 
             if data[ina]['respuesta'] == "func:repeat_text":
-              await ctx.send("<@" + str(ctx.author.id) + "> " + texto)
+              if len(texto) > 0:
+                await ctx.send("<@" + str(ctx.author.id) + "> " + texto)
             else:
               await ctx.send("<@" + str(ctx.author.id) + "> " + data[ina]['respuesta'])
 
@@ -757,17 +758,6 @@ async def servericon(ctx):
     await ctx.send("Este servidor no tiene icono.")
   else:
     await ctx.send(str(ctx.author.guild.icon_url))
-
-import aiohttp
-@bot.command(name = "meme")
-async def meme(ctx):
-  async with aiohttp.ClientSession() as cs:
-        async with cs.get('https://www.reddit.com/r/dankmemes/new.json?sort=hot') as r:
-            res = await r.json()
-            ramdom = random.randint(0, 25)
-            embed = discord.Embed(title="", colour = discord.Colour.from_rgb(219, 0, 255), description="[" + res['data']['children'] [ramdom]['data']['title'] + "](https://www.reddit.com" + res['data']['children'] [ramdom]['data']['permalink'] + ")")
-            embed.set_image(url=res['data']['children'] [ramdom]['data']['url'])
-            await ctx.send(embed=embed)
 
 @bot.command(name = "dime")
 async def dime(ctx):
@@ -2825,7 +2815,7 @@ chatbot = ChatBot("Kanna",
         },
         {
             'import_path': 'chatterbot.logic.LowConfidenceAdapter',
-            'threshold': 0.5,
+            'threshold': 0.3,
             'default_response': 'Disculpa, no te he entendido bien. ¿Puedes ser más específico?.'
         }
         #{
