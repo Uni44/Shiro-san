@@ -171,9 +171,8 @@ async def on_command_error(ctx,error):
       await ctx.send(embed=embed)
     else:
       if isinstance(error, commands.MissingPermissions):
-        if permisosCheck(ctx.author, 2):
-          embed.add_field(name=f':x: Error', value=f'No puedes usar eso.')
-          await ctx.send(embed=embed)
+        embed.add_field(name=f':x: Error', value=f'No tengo los permisos necesarios.')
+        await ctx.send(embed=embed)
       else:
         embed.add_field(name = f':x: Error', value = f"```{error}```")
         if permisosCheck(ctx.author, 2):
