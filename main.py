@@ -1804,6 +1804,10 @@ async def voice_create_hub(ctx):
 
 @bot.command(name = "voice-ban")
 async def voice_ban(ctx, miembro: discord.Member):
+  if not ctx.author.voice:
+    await ctx.send("No estas en un chat de voz.")
+    return
+    
   channel = ctx.author.voice.channel
 
   if channel == None:
@@ -1828,6 +1832,10 @@ async def voice_ban(ctx, miembro: discord.Member):
 
 @bot.command(name = "voice-unban")
 async def voice_unban(ctx, miembro: discord.Member):
+  if not ctx.author.voice:
+    await ctx.send("No estas en un chat de voz.")
+    return
+
   channel = ctx.author.voice.channel
 
   if channel == None:
@@ -1849,6 +1857,10 @@ async def voice_unban(ctx, miembro: discord.Member):
 
 @bot.command(name = "voice-kick")
 async def voice_kick(ctx, miembro: discord.Member):
+  if not ctx.author.voice:
+    await ctx.send("No estas en un chat de voz.")
+    return
+
   channel = ctx.author.voice.channel
   
   if channel == None:
@@ -1870,6 +1882,10 @@ async def voice_kick(ctx, miembro: discord.Member):
 
 @bot.command(name = "voice-rename")
 async def voice_rename(ctx, nombre: str = "Privado"):
+  if not ctx.author.voice:
+    await ctx.send("No estas en un chat de voz.")
+    return
+
   contenidonew = (nombre[:20]) if len(nombre) > 20 else nombre
 
   channel = ctx.author.voice.channel
@@ -1890,6 +1906,10 @@ async def voice_rename(ctx, nombre: str = "Privado"):
 
 @bot.command(name = "voice-hide")
 async def voice_hide(ctx):
+  if not ctx.author.voice:
+    await ctx.send("No estas en un chat de voz.")
+    return
+
   channel = ctx.author.voice.channel
 
   if channel == None:
@@ -1911,6 +1931,10 @@ async def voice_hide(ctx):
 
 @bot.command(name = "voice-unhide")
 async def voice_unhide(ctx):
+  if not ctx.author.voice:
+    await ctx.send("No estas en un chat de voz.")
+    return
+
   channel = ctx.author.voice.channel
 
   if channel == None:
@@ -1932,6 +1956,10 @@ async def voice_unhide(ctx):
 
 @bot.command(name = "voice-limit")
 async def voice_limit(ctx, limite: int = 6):
+  if not ctx.author.voice:
+    await ctx.send("No estas en un chat de voz.")
+    return
+
   channel = ctx.author.voice.channel
 
   if channel == None:
@@ -1957,6 +1985,10 @@ async def voice_limit(ctx, limite: int = 6):
 
 @bot.command(name = "voice-lock")
 async def voice_lock(ctx):
+  if not ctx.author.voice:
+    await ctx.send("No estas en un chat de voz.")
+    return
+
   channel = ctx.author.voice.channel
 
   if channel == None:
@@ -1978,6 +2010,10 @@ async def voice_lock(ctx):
 
 @bot.command(name = "voice-unlock")
 async def voice_unlock(ctx):
+  if not ctx.author.voice:
+    await ctx.send("No estas en un chat de voz.")
+    return
+
   channel = ctx.author.voice.channel
 
   if channel == None:
