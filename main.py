@@ -2280,7 +2280,10 @@ async def on_voice_state_update(member, before, after):
 async def on_message_delete(message):
   if message.author.bot:
     return
-  
+    
+  if not message.guild:
+    return
+
   #c.execute ("SELECT * FROM channel_message_log WHERE guild_id = '" + str(message.guild.id) + "'")
   #items = c.fetchall()
   items = await QueryGET("SELECT * FROM channel_message_log WHERE guild_id = '" + str(message.guild.id) + "'")
