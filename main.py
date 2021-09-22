@@ -1108,9 +1108,10 @@ async def unmute(ctx, miembro: discord.Member):
 @bot.command(name = "tempmute")
 async def tempmute(ctx, miembro: discord.Member, tiempo, manual: bool = True):
   if not manual or permisosCheck(ctx.author, 3):
-    if miembro == ctx.author:
-      await ctx.send("Te vas a automutear?")
-      return
+    if manual:
+      if miembro == ctx.author:
+        await ctx.send("Te vas a automutear?")
+        return
     
     time_convert = {"s": 1, "m": 60, "h": 3600, "d": 86400}
     
@@ -2588,13 +2589,21 @@ async def on_message(message):
 
   if closed == False:
     #anti invite
-    if "discord.gg" in message.content.lower():
-      if not permisosCheck(message.author, 1):
+    if "discord.gg/" in message.content.lower():
+      if not permisosCheck(message.author, 1) or True:
+        invitaciones = await message.guild.invites()
+        code = message.content.split("discord.gg/")[1]
+        pasoInvite = False
+
+        for invite in invitaciones:
+          if invite.code == code:
+            pasoInvite = True
+
         #c.execute ("SELECT * FROM anti_invite_ops WHERE guild_id = '" + str(message.guild.id) + "' AND option = 'enable'")
         #items = c.fetchall()
         items = await QueryGET("SELECT * FROM anti_invite_ops WHERE guild_id = '" + str(message.guild.id) + "' AND option = 'enable'")
 
-        if len(items) > 0:
+        if len(items) > 0 and not pasoInvite:
           #c.execute ("SELECT * FROM anti_invite_ops_channel WHERE guild_id = '" + str(message.guild.id) + "' AND channel_id = '" + str(message.channel.id) + "'")
           #items = c.fetchall()
           items = await QueryGET("SELECT * FROM anti_invite_ops_channel WHERE guild_id = '" + str(message.guild.id) + "' AND channel_id = '" + str(message.channel.id) + "'")
