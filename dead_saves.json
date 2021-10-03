@@ -88,7 +88,7 @@
         "age": 2043,
         "permanent": "False",
         "date": "2021-09-01",
-        "active": "True"
+        "active": "False"
     },
     {
         "user_id": 829567526219808808,
@@ -165,6 +165,90 @@
         "age": 2086,
         "permanent": "True",
         "date": "2021-09-19",
+        "active": "True"
+    },
+    {
+        "user_id": 730844402519375923,
+        "age": 2058,
+        "permanent": "True",
+        "date": "2021-09-23",
+        "active": "True"
+    },
+    {
+        "user_id": 887896029939261471,
+        "age": 2049,
+        "permanent": "False",
+        "date": "2021-09-23",
+        "active": "True"
+    },
+    {
+        "user_id": 867962161593475102,
+        "age": 2066,
+        "permanent": "True",
+        "date": "2021-09-24",
+        "active": "True"
+    },
+    {
+        "user_id": 837152839548665866,
+        "age": 2030,
+        "permanent": "False",
+        "date": "2021-09-24",
+        "active": "True"
+    },
+    {
+        "user_id": 711379497374711816,
+        "age": 2023,
+        "permanent": "True",
+        "date": "2021-09-24",
+        "active": "True"
+    },
+    {
+        "user_id": 862138486135586836,
+        "age": 2023,
+        "permanent": "True",
+        "date": "2021-09-24",
+        "active": "True"
+    },
+    {
+        "user_id": 859152125572153386,
+        "age": 2128,
+        "permanent": "True",
+        "date": "2021-09-29",
+        "active": "True"
+    },
+    {
+        "user_id": 841373920392380418,
+        "age": 2041,
+        "permanent": "False",
+        "date": "2021-09-29",
+        "active": "True"
+    },
+    {
+        "user_id": 892768699369549875,
+        "age": 2032,
+        "permanent": "True",
+        "date": "2021-09-29",
+        "active": "True"
+    },
+    {
+        "user_id": 849382781879320657,
+        "age": 2043,
+        "permanent": "True",
+        "date": "2021-09-29",
+        "active": "True"
+    },
+    {
+        "user_id": 871473093783216138,
+        "age": 2062,
+        "permanent": "False",
+        "date": "2021-09-29",
+        "active": "True"
+    },
+    {
+        "user_id": 876852458175987793,
+        "age": 2106,
+        "permanent": "True",
+        "date": "2021-09-29",
         "active": "True"
     }
 ]

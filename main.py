@@ -2853,17 +2853,19 @@ keep_alive()
 ## CHATBOT
 
 from chatterbot import ChatBot
-from  chatterbot.trainers import ChatterBotCorpusTrainer
-from  chatterbot.trainers import ListTrainer
+from chatterbot import filters
+from chatterbot.trainers import ChatterBotCorpusTrainer
+from chatterbot.trainers import ListTrainer
 
 chatbot = ChatBot("Kanna",
   storage_adapter='chatterbot.storage.MongoDatabaseAdapter',
-
+  database="chatterbot-database-2v",
   trainer='chatterbot.trainers.ListTrainer',
   #Un Logic_adapter es una clase que devuelve una respuesta ante una pregunta dada. 
     #Se pueden usar tantos logic_adapters como se quiera
+    filters=["chatterbot.filters.RepetitiveResponseFilter"],
     logic_adapters=[ 
-        #'chatterbot.logic.MathematicalEvaluation', #Este es un logic_adapter que responde preguntas sobre matemáticas en inglés
+        'chatterbot.logic.MathematicalEvaluation', #Este es un logic_adapter que responde preguntas sobre matemáticas en inglés
         #'chatterbot.logic.TimeLogicAdapter', #Este es un logic_adapter que responde preguntas sobre la hora actual en inglés
         
         {
@@ -2885,9 +2887,6 @@ chatbot = ChatBot("Kanna",
     preprocessors=[
         'chatterbot.preprocessors.clean_whitespace'
     ],
-    filters=[
-        'chatterbot.filters.RepetitiveResponseFilter'
-    ],
     database_uri= os.environ['ia_database_uri']
 )
 
@@ -2908,7 +2907,7 @@ genero = [
 
 if False: #pre entrenar para algunos datos
   chatbot.set_trainer(ListTrainer)
-  chatbot.train(nombre)
+  #chatbot.train(nombre)
   chatbot.train(creador)
   chatbot.train(genero)
 
