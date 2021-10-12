@@ -41,11 +41,11 @@ async def on_ready():
 import asyncio
 async def minutework():
   while True:
-    await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching,name=" anime | sh!"))
+    await bot.change_presence(status=discord.Status.idle, activity=discord.Activity(type=discord.ActivityType.watching,name=" anime | sh!"))
     await asyncio.sleep(20)
-    await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching,name=" anime | OTAKU ARMY"))
+    await bot.change_presence(status=discord.Status.idle, activity=discord.Activity(type=discord.ActivityType.watching,name=" anime | OTAKU ARMY"))
     await asyncio.sleep(20)
-    await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching,name=" anime | sh!invite"))
+    await bot.change_presence(status=discord.Status.idle, activity=discord.Activity(type=discord.ActivityType.watching,name=" anime | sh!invite"))
     await asyncio.sleep(20)
     #inicio
     #temp mute
@@ -2679,16 +2679,19 @@ async def on_message(message):
           if message.reference:
             if message.reference.cached_message:
               if message.reference.cached_message.content != "" and not message.reference.cached_message.author.bot:
-                texto1 = await limpiarTextoDiscord(message.reference.cached_message.content)
-                texto2 = await limpiarTextoDiscord(message.content)
+                ina = random.randint(0, 1)
 
-                if texto1 != "" or texto1 !=  " ":
-                  if texto2 != "" or texto2 !=  " ":
-                    nuevo = [
-                      texto1,
-                      texto2,
-                      ]
-                    chatbot.train(nuevo)
+                if ina == 0:
+                  texto1 = await limpiarTextoDiscord(message.reference.cached_message.content)
+                  texto2 = await limpiarTextoDiscord(message.content)
+
+                  if texto1 != "" or texto1 !=  " ":
+                    if texto2 != "" or texto2 !=  " ":
+                      nuevo = [
+                        texto1,
+                        texto2,
+                        ]
+                     chatbot.train(nuevo)
       else:
         if not "@everyone" in message.content and not "@here" in message.content:
           #modulo chattbot
