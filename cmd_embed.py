@@ -80,7 +80,7 @@ async def ex(nombre, channelname, ctx, bot):
           colour = discord.Colour.from_rgb(219, 0, 255)
           )
           #commandos
-          embed.add_field(name="General", value="<:admtag:860610530489663518> `sh!say` (Texto) \n <:admtag:860610530489663518> `sh!sayto` (Canal, Texto) \n <:admtag:860610530489663518> `sh!join` \n <:admtag:860610530489663518> `oa!lock` \n <:admtag:860610530489663518> `oa!unlock` \n <:admtag:860610530489663518> `oa!hide` \n <:admtag:860610530489663518> `oa!unhide`")
+          embed.add_field(name="General", value="<:admtag:860610530489663518> `sh!say` (Texto) \n <:admtag:860610530489663518> `sh!sayto` (Canal, Texto) \n <:admtag:860610530489663518> `sh!join` \n <:admtag:860610530489663518> `sh!lock` \n <:admtag:860610530489663518> `sh!unlock` \n <:admtag:860610530489663518> `sh!hide` \n <:admtag:860610530489663518> `sh!unhide`")
 
           embed.add_field(name="Roles", value="<:admtag:860610530489663518> `sh!reactrole` (Emoji, Rol, Texto) \n <:admtag:860610530489663518> `sh!joinrole` (Rol) \n <:admtag:860610530489663518> `sh!joinrole-clear`")
 
