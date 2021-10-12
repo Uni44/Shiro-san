@@ -656,9 +656,9 @@ async def welcome_set(ctx, channel: discord.TextChannel):
     if len(items) == 0:
       #c.execute("INSERT INTO welcomes VALUES ('" + str(ctx.guild.id) + "', '" + str(channel.id) + "')")
       await QueryEX("INSERT INTO welcomes VALUES ('" + str(ctx.guild.id) + "', '" + str(channel.id) + "')")
-      await ctx.send("Listo. Canal de bienvenidas asignado, para eliminarlo utiliza `welcome-clear`.")
+      await ctx.send("Listo. Canal de bienvenidas asignado, para eliminarlo utiliza `sh!welcome-clear`.")
     else:
-      await ctx.send("Listo. Canal de bienvenidas asignado, para eliminarlo utiliza `welcome-clear`.")
+      await ctx.send("Error. Ya tienes un canal de bienvenidas asignado, para eliminarlo utiliza `sh!welcome-clear`.")
     #conn.commit()
 
 @bot.command(name = "welcome-clear")
@@ -669,11 +669,11 @@ async def welcome_clear(ctx):
     items = await QueryGET("SELECT * FROM welcomes WHERE guild_id = '" + str(ctx.guild.id) + "'")
 
     if len(items) == 0:
-      await ctx.send("No hay un canal de bienvenidas asignado. Utiliza `welcome-set` para añadir un rol.")
+      await ctx.send("No hay un canal de bienvenidas asignado. Utiliza `sh!welcome-set` para añadir uno.")
     else:
       #c.execute ("DELETE FROM joinrole WHERE guild_id = '" + str(ctx.guild.id) + "'")
-      await QueryEX("DELETE FROM joinrole WHERE guild_id = '" + str(ctx.guild.id) + "'")
-      await ctx.send("Listo. Canal de bienvenidas asignado.")
+      await QueryEX("DELETE FROM welcomes WHERE guild_id = '" + str(ctx.guild.id) + "'")
+      await ctx.send("Listo. Canal de bienvenidas eliminado.")
     #conn.commit()
 
 @bot.command(name = "vote")
