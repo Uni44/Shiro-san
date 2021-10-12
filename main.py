@@ -2691,7 +2691,7 @@ async def on_message(message):
                         texto1,
                         texto2,
                         ]
-                     chatbot.train(nuevo)
+                      chatbot.train(nuevo)
       else:
         if not "@everyone" in message.content and not "@here" in message.content:
           #modulo chattbot
