@@ -1106,7 +1106,10 @@ async def unmute(ctx, miembro: discord.Member):
         await channel.send(embed=embed)
 
 @bot.command(name = "tempmute")
-async def tempmute(ctx, miembro: discord.Member, tiempo, manual: bool = True):
+async def tempmute(ctx, miembro: discord.Member, tiempo):
+  await func_tempmute(ctx, miembro, tiempo, True)
+
+async def func_tempmute(ctx, miembro: discord.Member, tiempo, manual: bool = True):
   if not manual or permisosCheck(ctx.author, 3):
     if manual:
       if miembro == ctx.author:
@@ -1508,6 +1511,13 @@ async def log_channel_clear(ctx):
     #conn.commit()
 
 @bot.command(name = "warn")
+async def warn(ctx, miembro: discord.Member, *razon:str):
+  if not razon:
+    await ctx.send("Por favor ingrese una razón.")
+    return
+  razon = ' '.join(razon)
+  await func_warn(ctx, miembro, razon, True)
+
 async def warn(ctx, miembro: discord.Member, razon: str = "Sin razón", manual: bool = True):
   if manual and permisosCheck(ctx.author, 1):
     if miembro == ctx.author:
@@ -2610,8 +2620,8 @@ async def on_message(message):
 
           if len(items) == 0:
             await message.delete()
-            await tempmute(message.channel, message.author, "2h", False)
-            await warn(message.channel, message.author, "Pasar invitaciones a otros servidores", False)
+            await func_tempmute(message.channel, message.author, "2h", False)
+            await func_warn(message.channel, message.author, "Pasar invitaciones a otros servidores", False)
             await message.author.send("Hola, has recibido una advertencia y has sido silenciado por 2 horas por `Pasar invitaciones a otros servidores` dentro del servidor de **" + message.guild.name + "**. Te recomendamos leer las reglas del servidor y las Directivas de la comunidad de Discord https://discord.com/guidelines para no tener mas inconvenientes.")
 
     #responses
