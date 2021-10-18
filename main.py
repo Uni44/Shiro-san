@@ -1518,7 +1518,7 @@ async def warn(ctx, miembro: discord.Member, *razon:str):
   razon = ' '.join(razon)
   await func_warn(ctx, miembro, razon, True)
 
-async def warn(ctx, miembro: discord.Member, razon: str = "Sin razón", manual: bool = True):
+async def func_warn(ctx, miembro: discord.Member, razon: str = "Sin razón", manual: bool = True):
   if manual and permisosCheck(ctx.author, 1):
     if miembro == ctx.author:
       await ctx.send("Te vas a autowarnear?")
