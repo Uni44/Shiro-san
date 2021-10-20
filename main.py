@@ -2305,6 +2305,9 @@ async def on_message_delete(message):
     embed1 = discord.Embed(title="Mensaje eliminado en " +  message.channel.name)
     embed1.add_field(name=f"**Mensaje eliminado**", value=f"Mensaje:\n" + contenidonew + "", inline=True)
     embed1.add_field(name=f"**Author del mensaje**", value=f"Author:\n<@" + str(message.author.id) + ">", inline=True)
+    if message.attachments:
+      for x in message.attachments:
+        embed1.add_field(name=f"**Archivo adjunto**", value=f"Link:\n" + x.url, inline=True)
     dele = bot.get_channel(int(items[0][1]))
     await dele.send(embed=embed1)
 
