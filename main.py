@@ -1001,7 +1001,14 @@ async def banlist(ctx):
           data = "> •<@{}>{} ({}#{}) ID: {}\n Razon: {}\n".format(details[0], details[3], details[1], details[2], details[4], details[5])
           pretty_list.add(data)
 
-      await ctx.send("**Ban list:** \n{}".format("\n".join(pretty_list)))
+      await ctx.channel.trigger_typing()
+
+      await asyncio.sleep(2)
+
+      if len("**Ban list:** \n{}".format("\n".join(pretty_list))) < 3900:
+        await ctx.send("**Ban list:** \n{}".format("\n".join(pretty_list)))
+      else:
+        await ctx.send("La lista de baneos de tu servidor es muy extensa, por favor utiliza la lista de Discord.")
 
 @bot.command(name = "unban")
 async def unban(ctx, id: int):
