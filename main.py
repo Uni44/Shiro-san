@@ -41,11 +41,11 @@ async def on_ready():
 import asyncio
 async def minutework():
   while True:
-    await bot.change_presence(status=discord.Status.idle, activity=discord.Activity(type=discord.ActivityType.watching,name=" anime | sh!"))
+    await bot.change_presence(status=discord.Status.online, activity=discord.Activity(type=discord.ActivityType.watching,name=" anime | sh!"))
     await asyncio.sleep(20)
-    await bot.change_presence(status=discord.Status.idle, activity=discord.Activity(type=discord.ActivityType.watching,name=" anime | OTAKU ARMY"))
+    await bot.change_presence(status=discord.Status.online, activity=discord.Activity(type=discord.ActivityType.watching,name=" anime | OTAKU ARMY"))
     await asyncio.sleep(20)
-    await bot.change_presence(status=discord.Status.idle, activity=discord.Activity(type=discord.ActivityType.watching,name=" anime | sh!invite"))
+    await bot.change_presence(status=discord.Status.online, activity=discord.Activity(type=discord.ActivityType.watching,name=" anime | sh!invite"))
     await asyncio.sleep(20)
     #inicio
     #temp mute
