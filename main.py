@@ -222,8 +222,13 @@ for filename in os.listdir('./Cogs'):
 #    await cmd_embed.ex(nombre, channelname, ctx, bot)
 
 @bot.command(name = "say")
-async def say_(ctx, texto):
+async def say_(ctx, *texto:str):
   if permisosCheck(ctx.author, 2):
+    await ctx.message.delete()
+    if not texto:
+      await ctx.send("Por favor ingrese un texto.")
+      return
+    texto = ' '.join(texto)
     await cmd_say.ex(texto, ctx)
 
 @bot.command(name = "sayto")
