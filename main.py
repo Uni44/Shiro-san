@@ -2893,7 +2893,7 @@ chatbot = ChatBot("Kanna",
     #Se pueden usar tantos logic_adapters como se quiera
     filters=["chatterbot.filters.RepetitiveResponseFilter"],
     logic_adapters=[ 
-        'chatterbot.logic.MathematicalEvaluation', #Este es un logic_adapter que responde preguntas sobre matemáticas en inglés
+        #'chatterbot.logic.MathematicalEvaluation', #Este es un logic_adapter que responde preguntas sobre matemáticas en inglés
         #'chatterbot.logic.TimeLogicAdapter', #Este es un logic_adapter que responde preguntas sobre la hora actual en inglés
         
         {
