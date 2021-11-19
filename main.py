@@ -2747,7 +2747,8 @@ async def on_message(message):
 
               #respuesta = chatbot.get_response(mensaje_puro)
 
-              await message.channel.send("<@" + str(message.author.id) + "> " + str(respuesta))
+              #await message.channel.send("<@" + str(message.author.id) + "> " + str(respuesta))
+              await message.reply(str(respuesta))
               continuar_mencion_normal = False
 
           #mencion normal
