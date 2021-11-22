@@ -566,7 +566,7 @@ async def kick(ctx, miembro: discord.Member):
       embed.set_thumbnail(url=miembro.avatar_url)
       await channel.send(embed=embed)
 
-@bot.command(name = "user-info")
+@bot.command(name = "userinfo")
 async def user_info(ctx, miembro: discord.Member):
   if permisosCheck(ctx.author, 1):
 
@@ -603,7 +603,7 @@ async def user_info(ctx, miembro: discord.Member):
     embed.set_thumbnail(url=miembro.avatar_url)
     await ctx.send(embed=embed)
 
-@bot.command(name = "server-info")
+@bot.command(name = "serverinfo")
 async def server_info(ctx):
   if permisosCheck(ctx.author, 1):
     embed = discord.Embed(
