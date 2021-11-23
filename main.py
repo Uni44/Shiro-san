@@ -830,11 +830,19 @@ async def actividad(ctx, tipo="a"):
               description = 'Lista de actividades.',
               colour = discord.Colour.from_rgb(219, 0, 255)
               )
-    embed.add_field(name="YouTube Together", value="youtube | yt")
-    embed.add_field(name="Poker Night", value="poker | pn")
-    embed.add_field(name="Betrayal", value="betrayal | be")
-    embed.add_field(name="Fishington", value="fishington | fi")
-    embed.add_field(name="Chess in the Park", value="chess | ch")
+    embed.add_field(name="<:a:912487539384942604> YouTube Together", value="youtube | yt")
+    embed.add_field(name="<:a:912486525642612766> Poker Night", value="poker | pn")
+    embed.add_field(name="<:a:853161030062702592> Betrayal", value="betrayal | be")
+    embed.add_field(name="<:a:853161030062702592> Fishington", value="fishington | fi")
+    embed.add_field(name="<:a:912486814634360872> Chess in the Park", value="chess | ch")
+
+    embed.add_field(name="<:a:912487014924943422> Doodle Crew", value="doogle | dc")
+    embed.add_field(name="<:a:912487204297797702> Letter Tile", value="letter | lt")
+    embed.add_field(name="<:a:912487372766195752> SpellCast", value="spell | sp")
+    embed.add_field(name="<:a:912487972769783820> Checkers In The Park", value="checkers | cp")
+    embed.add_field(name="<:a:912487972102869003> Word Snacks", value="snacks | ws")
+
+    embed.add_field(name=":information_source: Ayuda", value="Prueba poniendo `oa!actividad yt`")
     embed.set_footer(text = 'Solicitado por ' + ctx.author.name + "#" + ctx.author.discriminator)
     await ctx.send(embed=embed)
     return
@@ -859,7 +867,7 @@ async def actividad(ctx, tipo="a"):
 
       embed = discord.Embed(
               title = '¡Actividad añadida!',
-              description = 'Añadido **YouTube Together** a [' + channel.name + '](https://discord.gg/' + response['code'] + ')\n> Haga clic en el link para unirse.',
+              description = 'Añadido <:a:912487539384942604> **YouTube Together** a [' + channel.name + '](https://discord.gg/' + response['code'] + ')\n> Haga clic en el link para unirse.',
               colour = discord.Colour.from_rgb(219, 0, 255)
               )
       embed.set_footer(text = 'Solicitado por ' + ctx.author.name + "#" + ctx.author.discriminator)
@@ -883,7 +891,7 @@ async def actividad(ctx, tipo="a"):
 
         embed = discord.Embed(
                 title = '¡Actividad añadida!',
-                description = 'Añadido **Poker Night** a [' + channel.name + '](https://discord.gg/' + response['code'] + ')\n> Haga clic en el link para unirse.',
+                description = 'Añadido <:a:912486525642612766> **Poker Night** a [' + channel.name + '](https://discord.gg/' + response['code'] + ')\n> Haga clic en el link para unirse.',
                 colour = discord.Colour.from_rgb(219, 0, 255)
                 )
         embed.set_footer(text = 'Solicitado por ' + ctx.author.name + "#" + ctx.author.discriminator)
@@ -907,7 +915,7 @@ async def actividad(ctx, tipo="a"):
 
           embed = discord.Embed(
                   title = '¡Actividad añadida!',
-                  description = 'Añadido **Betrayal.io** a [' + channel.name + '](https://discord.gg/' + response['code'] + ')\n> Haga clic en el link para unirse.',
+                  description = 'Añadido <:a:853161030062702592> **Betrayal.io** a [' + channel.name + '](https://discord.gg/' + response['code'] + ')\n> Haga clic en el link para unirse.',
                   colour = discord.Colour.from_rgb(219, 0, 255)
                   )
           embed.set_footer(text = 'Solicitado por ' + ctx.author.name + "#" + ctx.author.discriminator)
@@ -931,14 +939,14 @@ async def actividad(ctx, tipo="a"):
 
             embed = discord.Embed(
                     title = '¡Actividad añadida!',
-                    description = 'Añadido **Fishington.io** a [' + channel.name + '](https://discord.gg/' + response['code'] + ')\n> Haga clic en el link para unirse.',
+                    description = 'Añadido <:a:853161030062702592> **Fishington.io** a [' + channel.name + '](https://discord.gg/' + response['code'] + ')\n> Haga clic en el link para unirse.',
                     colour = discord.Colour.from_rgb(219, 0, 255)
                     )
             embed.set_footer(text = 'Solicitado por ' + ctx.author.name + "#" + ctx.author.discriminator)
 
             await ctx.send(embed=embed)
           else:
-            if tipo.lower() == "chesss" or tipo.lower()  == "ch":
+            if tipo.lower() == "chess" or tipo.lower()  == "ch":
               res = requests.post('https://discord.com/api/v8/channels/' + str(channel.id) + '/invites', json={
                                 "max_age": 86400,
                                 "max_uses": 0,
@@ -955,26 +963,156 @@ async def actividad(ctx, tipo="a"):
 
               embed = discord.Embed(
                       title = '¡Actividad añadida!',
-                      description = 'Añadido **Chess in the Park** a [' + channel.name + '](https://discord.gg/' + response['code'] + ')\n> Haga clic en el link para unirse.',
+                      description = 'Añadido <:a:912486814634360872> **Chess in the Park** a [' + channel.name + '](https://discord.gg/' + response['code'] + ')\n> Haga clic en el link para unirse.',
                       colour = discord.Colour.from_rgb(219, 0, 255)
                       )
               embed.set_footer(text = 'Solicitado por ' + ctx.author.name + "#" + ctx.author.discriminator)
 
               await ctx.send(embed=embed)
             else:
-              embed = discord.Embed(
-                    title = ':x: Error',
-                    description = 'La actividad solicitada no fue encontrada.',
-                    colour = discord.Colour.from_rgb(219, 0, 255)
-                    )
-              embed.add_field(name="YouTube Together", value="youtube | yt")
-              embed.add_field(name="Poker Night", value="poker | pn")
-              embed.add_field(name="Betrayal", value="betrayal | be")
-              embed.add_field(name="Fishington", value="fishington | fi")
-              embed.add_field(name="Chess in the Park", value="chess | ch")
-              embed.set_footer(text = 'Solicitado por ' + ctx.author.name + "#" + ctx.author.discriminator)
+              if tipo.lower() == "doodle" or tipo.lower()  == "dc":
+                res = requests.post('https://discord.com/api/v8/channels/' + str(channel.id) + '/invites', json={
+                                  "max_age": 86400,
+                                  "max_uses": 0,
+                                  "target_application_id": "878067389634314250",
+                                  "target_type": 2,
+                                  "temporary": "false",
+                              },
+                              headers={
+                                  "Authorization": 'Bot ' + str(TOKEN),
+                                  "Content-Type": "application/json"
+                              })
 
-              await ctx.send(embed=embed)
+                response = json.loads(res.text)
+
+                embed = discord.Embed(
+                        title = '¡Actividad añadida!',
+                        description = 'Añadido <:a:912487014924943422> **Doodle Crew** a [' + channel.name + '](https://discord.gg/' + response['code'] + ')\n> Haga clic en el link para unirse.',
+                        colour = discord.Colour.from_rgb(219, 0, 255)
+                        )
+                embed.set_footer(text = 'Solicitado por ' + ctx.author.name + "#" + ctx.author.discriminator)
+
+                await ctx.send(embed=embed)
+              else:
+                if tipo.lower() == "letter" or tipo.lower()  == "lt":
+                  res = requests.post('https://discord.com/api/v8/channels/' + str(channel.id) + '/invites', json={
+                                    "max_age": 86400,
+                                    "max_uses": 0,
+                                    "target_application_id": "879863686565621790",
+                                    "target_type": 2,
+                                    "temporary": "false",
+                                },
+                                headers={
+                                    "Authorization": 'Bot ' + str(TOKEN),
+                                    "Content-Type": "application/json"
+                                })
+
+                  response = json.loads(res.text)
+
+                  embed = discord.Embed(
+                          title = '¡Actividad añadida!',
+                          description = 'Añadido <:a:912487204297797702> **Letter Tile** a [' + channel.name + '](https://discord.gg/' + response['code'] + ')\n> Haga clic en el link para unirse.',
+                          colour = discord.Colour.from_rgb(219, 0, 255)
+                          )
+                  embed.set_footer(text = 'Solicitado por ' + ctx.author.name + "#" + ctx.author.discriminator)
+
+                  await ctx.send(embed=embed)
+                else:
+                  if tipo.lower() == "spell" or tipo.lower()  == "sp":
+                    res = requests.post('https://discord.com/api/v8/channels/' + str(channel.id) + '/invites', json={
+                                      "max_age": 86400,
+                                      "max_uses": 0,
+                                      "target_application_id": "852509694341283871",
+                                      "target_type": 2,
+                                      "temporary": "false",
+                                  },
+                                  headers={
+                                      "Authorization": 'Bot ' + str(TOKEN),
+                                      "Content-Type": "application/json"
+                                  })
+
+                    response = json.loads(res.text)
+
+                    embed = discord.Embed(
+                            title = '¡Actividad añadida!',
+                            description = 'Añadido <:a:912487372766195752> **SpellCast** a [' + channel.name + '](https://discord.gg/' + response['code'] + ')\n> Haga clic en el link para unirse.',
+                            colour = discord.Colour.from_rgb(219, 0, 255)
+                            )
+                    embed.set_footer(text = 'Solicitado por ' + ctx.author.name + "#" + ctx.author.discriminator)
+
+                    await ctx.send(embed=embed)
+                  else:
+                    if tipo.lower() == "checkers" or tipo.lower()  == "cp":
+                      res = requests.post('https://discord.com/api/v8/channels/' + str(channel.id) + '/invites', json={
+                                        "max_age": 86400,
+                                        "max_uses": 0,
+                                        "target_application_id": "832013003968348200",
+                                        "target_type": 2,
+                                        "temporary": "false",
+                                    },
+                                    headers={
+                                        "Authorization": 'Bot ' + str(TOKEN),
+                                        "Content-Type": "application/json"
+                                    })
+
+                      response = json.loads(res.text)
+
+                      embed = discord.Embed(
+                              title = '¡Actividad añadida!',
+                              description = 'Añadido <:a:912487972769783820> **Checkers In The Park** a [' + channel.name + '](https://discord.gg/' + response['code'] + ')\n> Haga clic en el link para unirse.',
+                              colour = discord.Colour.from_rgb(219, 0, 255)
+                              )
+                      embed.set_footer(text = 'Solicitado por ' + ctx.author.name + "#" + ctx.author.discriminator)
+
+                      await ctx.send(embed=embed)
+                    else:
+                      if tipo.lower() == "snacks" or tipo.lower()  == "ws":
+                        res = requests.post('https://discord.com/api/v8/channels/' + str(channel.id) + '/invites', json={
+                                          "max_age": 86400,
+                                          "max_uses": 0,
+                                          "target_application_id": "879863976006127627",
+                                          "target_type": 2,
+                                          "temporary": "false",
+                                      },
+                                      headers={
+                                          "Authorization": 'Bot ' + str(TOKEN),
+                                          "Content-Type": "application/json"
+                                      })
+
+                        response = json.loads(res.text)
+
+                        embed = discord.Embed(
+                                title = '¡Actividad añadida!',
+                                description = 'Añadido <:a:912487972102869003> **Word Snacks** a [' + channel.name + '](https://discord.gg/' + response['code'] + ')\n> Haga clic en el link para unirse.',
+                                colour = discord.Colour.from_rgb(219, 0, 255)
+                                )
+                        embed.set_footer(text = 'Solicitado por ' + ctx.author.name + "#" + ctx.author.discriminator)
+
+                        await ctx.send(embed=embed)
+
+                #FIN
+                      else:
+                        embed = discord.Embed(
+                              title = ':x: Error',
+                              description = 'La actividad solicitada no fue encontrada.',
+                              colour = discord.Colour.from_rgb(219, 0, 255)
+                              )
+                        embed.add_field(name="<:a:912487539384942604> YouTube Together", value="youtube | yt")
+                        embed.add_field(name="<:a:912486525642612766> Poker Night", value="poker | pn")
+                        embed.add_field(name="<:a:853161030062702592> Betrayal", value="betrayal | be")
+                        embed.add_field(name="<:a:853161030062702592> Fishington", value="fishington | fi")
+                        embed.add_field(name="<:a:912486814634360872> Chess in the Park", value="chess | ch")
+
+                        embed.add_field(name="<:a:912487014924943422> Doodle Crew", value="doogle | dc")
+                        embed.add_field(name="<:a:912487204297797702> Letter Tile", value="letter | lt")
+                        embed.add_field(name="<:a:912487372766195752> SpellCast", value="spell | sp")
+                        embed.add_field(name="<:a:912487972769783820> Checkers In The Park", value="checkers | cp")
+                        embed.add_field(name="<:a:912487972102869003> Word Snacks", value="snacks | ws")
+
+                        embed.add_field(name=":information_source: Ayuda", value="Prueba poniendo `oa!actividad yt`")
+                        embed.set_footer(text = 'Solicitado por ' + ctx.author.name + "#" + ctx.author.discriminator)
+
+                        await ctx.send(embed=embed)
   except AttributeError:
     await ctx.send('No estas en un chat de voz.')
 
