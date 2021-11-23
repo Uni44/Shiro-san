@@ -835,8 +835,7 @@ async def actividad(ctx, tipo="a"):
     embed.add_field(name="<:a:853161030062702592> Betrayal", value="betrayal | be")
     embed.add_field(name="<:a:853161030062702592> Fishington", value="fishington | fi")
     embed.add_field(name="<:a:912486814634360872> Chess in the Park", value="chess | ch")
-
-    embed.add_field(name="<:a:912487014924943422> Doodle Crew", value="doogle | dc")
+    embed.add_field(name="<:a:912487014924943422> Doodle Crew", value="doodle | dc")
     embed.add_field(name="<:a:912487204297797702> Letter Tile", value="letter | lt")
     embed.add_field(name="<:a:912487372766195752> SpellCast", value="spell | sp")
     embed.add_field(name="<:a:912487972769783820> Checkers In The Park", value="checkers | cp")
@@ -1102,8 +1101,7 @@ async def actividad(ctx, tipo="a"):
                         embed.add_field(name="<:a:853161030062702592> Betrayal", value="betrayal | be")
                         embed.add_field(name="<:a:853161030062702592> Fishington", value="fishington | fi")
                         embed.add_field(name="<:a:912486814634360872> Chess in the Park", value="chess | ch")
-
-                        embed.add_field(name="<:a:912487014924943422> Doodle Crew", value="doogle | dc")
+                        embed.add_field(name="<:a:912487014924943422> Doodle Crew", value="doodle | dc")
                         embed.add_field(name="<:a:912487204297797702> Letter Tile", value="letter | lt")
                         embed.add_field(name="<:a:912487372766195752> SpellCast", value="spell | sp")
                         embed.add_field(name="<:a:912487972769783820> Checkers In The Park", value="checkers | cp")
