@@ -63,8 +63,9 @@ async def ex(nombre, channelname, ctx, bot):
             embed.add_field(name="🎲 Tirare los dados", value="sh!dados")
             embed.add_field(name="📷 Avatar (Miembro)", value="sh!avatar")
             embed.add_field(name="📷 Icono del server", value="sh!servericon")
-            #embed.add_field(name="🍌 Meme alazar", value="sh!meme")
+            embed.add_field(name="🌌 Banner (Miembro)", value="sh!banner")
             embed.add_field(name="🔒 Comandos de privadas", value="sh!voice-help")
+            embed.add_field(name="🚨 Menu de moderación (Miembro) <:modtag:860610530578399293>", value="sh!mod")
             embed.add_field(name="💻 Lista de comandos", value="sh!help")
             embed.add_field(name="💻 Lista de comandos de administración y moderación <:modtag:860610530578399293>", 
             value="sh!help2")
@@ -86,7 +87,7 @@ async def ex(nombre, channelname, ctx, bot):
 
           embed.add_field(name="Respuestas", value="<:admtag:860610530489663518> `sh!response-add` (Intentos, Palabra clave, Respuesta) \n <:admtag:860610530489663518> `sh!response-delete` (ID) \n <:admtag:860610530489663518> `sh!response-list`")
 
-          embed.add_field(name="Moderación", value="<:modtag:860610530578399293> `sh!kick` (Miembro) \n <:modtag:860610530578399293> `sh!ban` (Miembro) \n <:modtag:860610530578399293> `sh!unban` (Miembro) \n <:modtag:860610530578399293> `sh!banlist` \n <:admtag:860610530489663518> `sh!setmuterol` (Rol) \n <:modtag:860610530578399293> `sh!tempmute` (Miembro, Tiempo [1m/h/d]) \n <:modtag:860610530578399293> `sh!mute` (Miembro) \n <:modtag:860610530578399293> `sh!unmute` (Miembro) \n <:modtag:860610530578399293> `sh!userinfo` (Miembro) \n <:modtag:860610530578399293> `sh!clear` (Cantidad) \n <:modtag:860610530578399293> `sh!serverinfo` \n <:modtag:860610530578399293> `sh!warn` (Miembro, Razon) \n <:modtag:860610530578399293> `sh!infractions` (Miembro) \n <:admtag:860610530489663518> `sh!clear-infraction` (Miembro, ID) \n <:admtag:860610530489663518> `sh!clear-all-infractions` (Miembro)")
+          embed.add_field(name="Moderación", value="<:modtag:860610530578399293> `sh!mod` (Miembro) \n <:modtag:860610530578399293> `sh!kick` (Miembro) \n <:modtag:860610530578399293> `sh!ban` (Miembro) \n <:modtag:860610530578399293> `sh!unban` (Miembro) \n <:modtag:860610530578399293> `sh!banlist` \n <:admtag:860610530489663518> `sh!setmuterol` (Rol) \n <:modtag:860610530578399293> `sh!tempmute` (Miembro, Tiempo [1m/h/d]) \n <:modtag:860610530578399293> `sh!mute` (Miembro) \n <:modtag:860610530578399293> `sh!unmute` (Miembro) \n <:modtag:860610530578399293> `sh!userinfo` (Miembro) \n <:modtag:860610530578399293> `sh!clear` (Cantidad) \n <:modtag:860610530578399293> `sh!serverinfo` \n <:modtag:860610530578399293> `sh!warn` (Miembro, Razon) \n <:modtag:860610530578399293> `sh!infractions` (Miembro) \n <:admtag:860610530489663518> `sh!clear-infraction` (Miembro, ID) \n <:admtag:860610530489663518> `sh!clear-all-infractions` (Miembro)")
 
           embed.add_field(name="Niveles", value="<:admtag:860610530489663518> `sh!level-enable` \n <:admtag:860610530489663518> `sh!level-disable` \n <:admtag:860610530489663518> `sh!level-role-add` (Nivel, Rol) \n <:admtag:860610530489663518> `sh!level-role-remove` (Rol) \n <:admtag:860610530489663518> `sh!level-role-list` \n <:admtag:860610530489663518> `sh!level-channel-add` (Canal) \n <:admtag:860610530489663518> `sh!level-channel-remove` (Canal) \n <:admtag:860610530489663518> `sh!level-channel-list` \n ")
 

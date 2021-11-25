@@ -15,6 +15,8 @@ from keep_alive import keep_alive
 
 from discord.ext import commands
 
+from discord_components import DiscordComponents, Button, ButtonStyle
+
 intents=intents=discord.Intents.all()
 intents.presences = True
 intents.members = True
@@ -27,7 +29,8 @@ TOKEN = os.environ['TOKEN']#TokenFile.read()
 OWNERID = 269549755850293249
 
 # Define "bot"
-bot = commands.Bot(command_prefix = "sh!", case_insensitive=True, intents=intents)
+bot = commands.Bot(command_prefix = "sh!", case_insensitive=False, intents=intents)
+DiscordComponents(bot)
 
 bot.remove_command("help")
 
@@ -174,12 +177,16 @@ async def on_command_error(ctx,error):
         embed.add_field(name=f':x: Error', value=f'No tengo los permisos necesarios.')
         await ctx.send(embed=embed)
       else:
-        embed.add_field(name = f':x: Error', value = f"```{error}```")
-        if permisosCheck(ctx.author, 2):
-          await ctx.send(embed = embed)
-        channel = bot.get_channel(848814902478897203)
-        await channel.send("<@" + str(ctx.author.id) + "> " + "<#" + str(ctx.channel.id) + ">", embed = embed)
-        raise error
+        if isinstance(error, commands.MemberNotFound):
+          embed.add_field(name=f':x: Error', value=f'El miembro no fue encontrado.')
+          await ctx.send(embed=embed)
+        else:
+          embed.add_field(name = f':x: Error', value = f"```{error}```")
+          if permisosCheck(ctx.author, 2):
+            await ctx.send(embed = embed)
+          channel = bot.get_channel(848814902478897203)
+          await channel.send("<@" + str(ctx.author.id) + "> " + "<#" + str(ctx.channel.id) + ">", embed = embed)
+          raise error
 
 # Load command to manage our "Cogs" or extensions
 @bot.command()
@@ -346,6 +353,7 @@ async def help2(ctx):
 @bot.command(name = "leave_guild")
 async def leave_guild(ctx):
   if ctx.author.id == OWNERID:
+    await ctx.message.delete()
     await ctx.guild.leave()
 
 @bot.command(name = "list_guild")
@@ -2375,7 +2383,365 @@ async def chat_ia_disable(ctx):
       await QueryEX("UPDATE chat_ia_ops SET option = 'disable' WHERE guild_id = '" + str(ctx.guild.id) + "'")
       await ctx.send("Listo. Las respuestas con IA fueron desactivadas.")
 
-###UTILERIA
+@bot.command(name = "banner")
+async def banner(ctx, miembro:discord.Member = None):
+  user = miembro
+  if user == None:
+      user = ctx.author
+  req = await bot.http.request(discord.http.Route("GET", "/users/{uid}", uid=user.id))
+  banner_id = req["banner"]
+  # If statement because the user may not have a banner
+  if banner_id:
+    banner_url = f"https://cdn.discordapp.com/banners/{user.id}/{banner_id}?size=1024"
+    await ctx.send(f"{banner_url}")
+  else:
+    await ctx.send("El miembro no tiene banner")
+
+## MODERATION OTA
+
+@bot.command(name = "mod")
+async def boton(ctx, miembro:discord.Member):
+  user = miembro
+
+  if permisosCheck(ctx.author, 1):
+    #if ctx.guild.id != 848833707426578472: #Cambiar ID de Servidor
+      #return
+
+    if not user or user == None:
+      await ctx.send("Error, por favor ingrese un miembro.")
+      return
+
+    if user.id == bot.user.id:
+      await ctx.send("Error, por favor ingrese un miembro.")
+      return
+
+    await ctx.message.delete()
+
+    embed = discord.Embed(
+            title = '**VERIFICAR USUARIO**',
+            description = "El usuario fue encontrado como: <@" + str(user.id) + "> (" + user.name + "#" + str(user.discriminator) + ") \nID: " + str(user.id) + "\n\n\n **Verifica que el usuario sea el correcto.**",
+            colour = discord.Colour.from_rgb(255, 0, 255)
+            )
+    embed.set_thumbnail(url="https://emoji.gg/assets/emoji/6453-ban-hammer.png")
+    embed.set_author(name=ctx.author.name + "#" + str(ctx.author.discriminator) + " ID: " + str(ctx.author.id), icon_url=ctx.author.avatar_url)
+    embed.set_image(url=user.avatar_url)
+    embed.set_footer(text = 'Solicitado por ' + ctx.author.name + "#" + ctx.author.discriminator)
+    mensaje = await ctx.send(embed=embed,
+          components = [
+              [Button(style=ButtonStyle.green, label = "Confirmar", custom_id="button1"),
+              Button(style=ButtonStyle.red, label = "Cancelar", custom_id="button2")],
+          ],
+      )
+    
+    if True:
+    #while True:
+      interaction = await bot.wait_for("button_click", check=lambda message: message.author == ctx.author)
+
+      if interaction.custom_id == "button1":
+        if permisosCheck(ctx.author, 1):
+          await interaction.respond(content="Confirmado con éxito, por favor seleccione la regla que incumplió el miembro.")
+
+          embed2 = discord.Embed(
+                  title = '**INFORMACIÓN DEL USUARIO**',
+                  description = "Infracciones de <@" + str(user.id) + "> (" + user.name + "#" + str(user.discriminator) + ") \nID: " + str(user.id) + ":",
+                  colour = discord.Colour.from_rgb(255, 0, 255)
+                  )
+          embed.set_thumbnail(url="https://emoji.gg/assets/emoji/6453-ban-hammer.png")
+          embed2.set_author(name=ctx.author.name + "#" + str(ctx.author.discriminator) + " ID: " + str(ctx.author.id), icon_url=ctx.author.avatar_url)
+          embed2.set_image(url=user.avatar_url)
+          embed2.set_footer(text = 'Solicitado por ' + ctx.author.name + "#" + ctx.author.discriminator)
+
+          items = await QueryGET("SELECT * FROM warns WHERE guild_id = '" + str(ctx.guild.id) + "' AND user_id = '" + str(user.id) + "'")
+
+          rol = ""
+          if permisosCheck(miembro, 3):
+            rol = rol +"Dueño del server, "
+          if permisosCheck(miembro, 2):
+            rol = rol + "Administrador, "
+          if permisosCheck(miembro, 1):
+            rol = rol + "Moderador, "
+          rol = rol + "Miembro"
+
+          embed2.add_field(name=":information_source: Información del miembro", value="Toda la información resumida del miembro.", inline=False)
+          embed2.add_field(name="Entró al Servidor el", value=miembro.joined_at.strftime("%b %d, %Y %H:%M:%S"))
+          embed2.add_field(name="Entró a Discord el", value=miembro.created_at.strftime("%b %d, %Y %H:%M:%S"))
+          if miembro.premium_since == None:
+            embed2.add_field(name="Mejorando desde", value="No")
+          else:
+            embed2.add_field(name="Mejorando desde", value=miembro.premium_since.strftime("%b %d, %Y %H:%M:%S"))
+          embed2.add_field(name="Discriminador", value=miembro.discriminator)
+          embed2.add_field(name="ID", value=str(miembro.id))
+
+          if len(items) == 0:
+            embed2.add_field(name="<:a:853161030052741151> Todo en orden", value="El miembro no tiene advertencias.", inline=False)
+          else:
+            for item in items:
+              embed2.add_field(name="Advertencia n° " + item[5], value= "Por: <@" + item[4] + "> \n Razon: " + item[2] + "\n Fecha: " + item[3], inline=False)
+
+          await mensaje.edit(embed=embed2, components = [
+          [Button(style=ButtonStyle.red, label = "🚨 Punir", custom_id="Punir"),
+          Button(style=ButtonStyle.grey, label = "❌ Terminar", custom_id="Cancelar")],
+          ])
+          
+          if True:
+          #while True:
+            interaction = await bot.wait_for("button_click", check=lambda message: message.author == ctx.author)
+
+            if interaction.custom_id == "Punir":
+              if permisosCheck(ctx.author, 1):
+                await interaction.respond(content="Entrando al menú de punición.")
+                await mod_menu_reglas(ctx, user, mensaje, embed, embed2, 1)
+
+            if interaction.custom_id == "Cancelar":
+              if permisosCheck(interaction.user, 1):
+                embed = discord.Embed(
+                        title = '**VERIFICAR USUARIO**',
+                        description = "Miembro: <@" + str(user.id) + "> (" + user.name + "#" + str(user.discriminator) + ") \nID: " + str(user.id) + "\n\n\n **Todo correcto.**",
+                        colour = discord.Colour.from_rgb(255, 0, 255)
+                        )
+                embed.set_thumbnail(url="https://emoji.gg/assets/emoji/6453-ban-hammer.png")
+                embed.set_author(name=ctx.author.name + "#" + str(ctx.author.discriminator) + " ID: " + str(ctx.author.id), icon_url=ctx.author.avatar_url)
+                embed.set_image(url=user.avatar_url)
+                embed.set_footer(text = 'Solicitado por ' + ctx.author.name + "#" + ctx.author.discriminator)
+                await interaction.respond(content="Terminado con éxito.")
+                await mensaje.edit("<:a:853161030052741151> **Terminado**", embed=embed, components=[])
+
+      if interaction.custom_id == "button2":
+        if permisosCheck(interaction.user, 1):
+          await interaction.respond(content="Cancelado con éxito.")
+          await mensaje.edit("<:a:853161029864128512> **Cancelado**", embed=embed, components=[])
+
+async def mod_menu_reglas(ctx, miembro, mensaje, embed, embed2, pagina):
+  if pagina == 1:
+    await mensaje.edit(embed=embed2, components = [
+      Button(style=ButtonStyle.grey, label = "Mandar contenido inapropiado.", custom_id="R1"),
+      Button(style=ButtonStyle.grey, label = "Mandar contenido inapropiado que perjudique a los streamers.", custom_id="R2"),
+      Button(style=ButtonStyle.grey, label = "Mandar información privada.", custom_id="R3"),
+      Button(style=ButtonStyle.grey, label = "Pasar invitaciones a otros servidores.", custom_id="R4"),
+      Button(style=ButtonStyle.blue, label = "Siguiente ➡", custom_id="Siguiente1"),
+      #Button(style=ButtonStyle.grey, label = "Tener una actitud tóxica.", custom_id="R5"),
+      #Button(style=ButtonStyle.grey, label = "Hacer mal uso de los canales temáticos.", custom_id="R6"),
+      #Button(style=ButtonStyle.grey, label = "Hacer un excesivo spam o flood en los canales.", custom_id="R7"),
+      #Button(style=ButtonStyle.grey, label = "Abusar de las menciones sin justificación alguna.", custom_id="R8"),
+      #Button(style=ButtonStyle.grey, label = "Transmitir contenido NSFW.", custom_id="R9"),
+      #Button(style=ButtonStyle.grey, label = "Transmitir contenido NSFW.", custom_id="R10"),
+      #Button(style=ButtonStyle.grey, label = "Mantener una actitud tóxica.", custom_id="R11"),
+      #Button(style=ButtonStyle.grey, label = "Alterar el ambiente de la llamada.", custom_id="R12"),
+      #Button(style=ButtonStyle.grey, label = "Saturar el audio.", custom_id="R13"),
+      #Button(style=ButtonStyle.grey, label = "Violación de Guidelines y ToS de Discord.", custom_id="R14"),
+      #Button(style=ButtonStyle.grey, label = "Ingresar multicuentas al servidor.", custom_id="R15"),
+      #Button(style=ButtonStyle.grey, label = "Preparar o realizar raideos a servidores.", custom_id="R16"),
+      #Button(style=ButtonStyle.grey, label = "❌ Cancelar", custom_id="Cancelar"),
+      ])
+
+  if pagina == 2:
+    await mensaje.edit(embed=embed2, components = [
+      Button(style=ButtonStyle.grey, label = "Tener una actitud tóxica.", custom_id="R5"),
+      Button(style=ButtonStyle.grey, label = "Hacer mal uso de los canales temáticos.", custom_id="R6"),
+      Button(style=ButtonStyle.grey, label = "Hacer un excesivo spam o flood en los canales.", custom_id="R7"),
+      Button(style=ButtonStyle.grey, label = "Abusar de las menciones sin justificación alguna.", custom_id="R8"),
+      Button(style=ButtonStyle.blue, label = "Siguiente ➡", custom_id="Siguiente2"),
+      ])
+
+  if pagina == 3:
+    await mensaje.edit(embed=embed2, components = [
+      Button(style=ButtonStyle.grey, label = "Transmitir contenido NSFW.", custom_id="R9"),
+      Button(style=ButtonStyle.grey, label = "Mantener una actitud tóxica.", custom_id="R10"),
+      Button(style=ButtonStyle.grey, label = "Alterar el ambiente de la llamada.", custom_id="R11"),
+      Button(style=ButtonStyle.grey, label = "Saturar el audio.", custom_id="R12"),
+      Button(style=ButtonStyle.blue, label = "Siguiente ➡", custom_id="Siguiente3"),
+      ])
+
+  if pagina == 4:
+    await mensaje.edit(embed=embed2, components = [
+      Button(style=ButtonStyle.grey, label = "Violación de Guidelines y ToS de Discord.", custom_id="R13"),
+      Button(style=ButtonStyle.grey, label = "Ingresar multicuentas al servidor.", custom_id="R14"),
+      Button(style=ButtonStyle.grey, label = "Preparar o realizar raideos a servidores.", custom_id="R15"),
+      Button(style=ButtonStyle.grey, label = "❌ Cancelar", custom_id="Cancelar"),
+      Button(style=ButtonStyle.blue, label = "Siguiente ➡", custom_id="Siguiente5"),
+      ])
+
+  if pagina == 5:
+    await mensaje.edit(embed=embed2, components = [
+      Button(style=ButtonStyle.grey, label = "❌ Cancelar", custom_id="Cancelar"),
+      Button(style=ButtonStyle.blue, label = "Siguiente ➡", custom_id="Siguiente5"),
+      ])
+
+  if True:
+  #while True:
+    interaction = await bot.wait_for("button_click", check=lambda message: message.author == ctx.author)
+    if permisosCheck(ctx.author, 1):
+      reglaID = interaction.custom_id
+      reglaLabel = interaction.component.label
+
+      if interaction.custom_id == "Siguiente1":
+        if permisosCheck(ctx.author, 1):
+          await interaction.respond(content="Siguiente pagina.")
+          await mod_menu_reglas(ctx, miembro, mensaje, embed, embed2, 2)
+          return
+
+      if interaction.custom_id == "Siguiente2":
+        if permisosCheck(ctx.author, 1):
+          await interaction.respond(content="Siguiente pagina.")
+          await mod_menu_reglas(ctx, miembro, mensaje, embed, embed2, 3)
+          return
+
+      if interaction.custom_id == "Siguiente3":
+        if permisosCheck(ctx.author, 1):
+          await interaction.respond(content="Siguiente pagina.")
+          await mod_menu_reglas(ctx, miembro, mensaje, embed, embed2, 4)
+          return
+
+      if interaction.custom_id == "Siguiente4":
+        if permisosCheck(ctx.author, 1):
+          await interaction.respond(content="Siguiente pagina.")
+          await mod_menu_reglas(ctx, miembro, mensaje, embed, embed2, 5)
+          return
+
+      if interaction.custom_id == "Siguiente5":
+        if permisosCheck(ctx.author, 1):
+          await interaction.respond(content="Siguiente pagina.")
+          await mod_menu_reglas(ctx, miembro, mensaje, embed, embed2, 1)
+          return
+
+      if interaction.custom_id == "Cancelar":
+        if permisosCheck(ctx.author, 1):
+          await interaction.respond(content="Cancelado con éxito.")
+          await mensaje.edit("<:a:853161029864128512> **Cancelado**", embed=embed, components=[])
+          return
+
+      await interaction.respond(content="Continuado con éxito, por favor ahora seleccione una medida a tomar.")
+      await mod_menu_medidas(ctx, miembro, mensaje, embed, embed2, reglaID, reglaLabel, 1)
+
+async def mod_menu_medidas(ctx, miembro, mensaje, embed, embed2, reglaID, reglaLabel, pagina):
+  user = miembro
+
+  if pagina == 1:
+    await mensaje.edit(embed=embed2, components=[
+    Button(style=ButtonStyle.red, label = "Advertencia.", custom_id="M1"),
+    Button(style=ButtonStyle.red, label = "Advertencia, Muteo temporal por 2 horas.", custom_id="M2"),
+    Button(style=ButtonStyle.red, label = "Advertencia, Muteo temporal por 7 días.", custom_id="M3"),
+    Button(style=ButtonStyle.red, label = "Advertencia, Muteo temporal por 30 días.", custom_id="M4"),
+    Button(style=ButtonStyle.blue, label = "Siguiente ➡", custom_id="Siguiente1"),
+    #Button(style=ButtonStyle.red, label = "Advertencia, Muteo permanente", custom_id="M5"),
+    #Button(style=ButtonStyle.red, label = "Advertencia, Baneo permanente.", custom_id="M6"),
+    #Button(style=ButtonStyle.green, label = "❌ Cancelar", custom_id="Cancelar"),
+    #Button(style=ButtonStyle.blue, label = "Siguiente ➡", custom_id="Siguiente2"),
+    ])
+
+  if pagina == 2:
+    await mensaje.edit(embed=embed2, components=[
+    Button(style=ButtonStyle.red, label = "Advertencia, Muteo permanente", custom_id="M5"),
+    Button(style=ButtonStyle.red, label = "Advertencia, Baneo permanente.", custom_id="M6"),
+    Button(style=ButtonStyle.green, label = "❌ Cancelar", custom_id="Cancelar"),
+    Button(style=ButtonStyle.blue, label = "Siguiente ➡", custom_id="Siguiente2"),
+    ])
+
+  if True:
+  #while True:
+    interaction = await bot.wait_for("button_click", check=lambda message: message.author == ctx.author)
+    if permisosCheck(ctx.author, 1):
+      medidaID = interaction.custom_id
+      medidaLabel = interaction.component.label
+
+      if interaction.custom_id == "Siguiente1":
+          if permisosCheck(ctx.author, 1):
+            await interaction.respond(content="Siguiente pagina.")
+            await mod_menu_medidas(ctx, miembro, mensaje, embed, embed2, reglaID, reglaLabel, 2)
+            return
+
+      if interaction.custom_id == "Siguiente2":
+          if permisosCheck(ctx.author, 1):
+            await interaction.respond(content="Siguiente pagina.")
+            await mod_menu_medidas(ctx, miembro, mensaje, embed, embed2, reglaID, reglaLabel, 1)
+            return
+
+      if interaction.custom_id == "Cancelar":
+          if permisosCheck(ctx.author, 1):
+            await interaction.respond(content="Cancelado con éxito.")
+            await mensaje.edit("<:a:853161029864128512> **Cancelado**", embed=embed, components=[])
+            return
+
+      embed3 = discord.Embed(
+        title = '**MEDIDAS TOMADAS**',
+        description = "Contra el usuario: <@" + str(user.id) + "> (" + user.name + "#" + str(user.discriminator) + ") \nID: " + str(user.id) + "\n **Razon:** " + reglaLabel +" \n **Medidas:** " + medidaLabel,
+        colour = discord.Colour.from_rgb(255, 0, 0)
+        )
+      embed3.set_thumbnail(url="https://emoji.gg/assets/emoji/6453-ban-hammer.png")
+      embed3.set_author(name=ctx.author.name + "#" + str(ctx.author.discriminator) + " ID: " + str(ctx.author.id), icon_url=ctx.author.avatar_url)
+      embed3.set_image(url=user.avatar_url)
+      embed3.set_footer(text = 'Solicitado por ' + ctx.author.name + "#" + ctx.author.discriminator)
+      await interaction.respond(content="Listo todo correcto, tomando medidas.")
+      await mensaje.edit("<:a:853161030052741151> **Medidas tomadas con exito**", embed=embed3, components=[])
+
+      await mod_medidas(ctx, miembro, mensaje, reglaID, reglaLabel, medidaID, medidaLabel)
+
+async def mod_medidas(ctx, miembro, mensaje, reglaID, reglaLabel, medidaID, medidaLabel):
+  if medidaID == "M1":
+    await func_warn(ctx.channel, miembro, reglaLabel, False)
+    await miembro.send("Hola, has recibido una advertencia por `" + reglaLabel + "` dentro del servidor de **" + ctx.guild.name + "**. Te recomendamos leer las reglas del servidor y las Directivas de la comunidad de Discord https://discord.com/guidelines para no tener mas inconvenientes.")
+    return
+  if medidaID == "M2":
+    await func_tempmute(ctx.channel, miembro, "2h", False)
+    await func_warn(ctx.channel, miembro, reglaLabel, False)
+    await miembro.send("Hola, has recibido una advertencia y has sido silenciado por 2 horas por `" + reglaLabel + "` dentro del servidor de **" + ctx.guild.name + "**. Te recomendamos leer las reglas del servidor y las Directivas de la comunidad de Discord https://discord.com/guidelines para no tener mas inconvenientes.")
+    return
+  if medidaID == "M3":
+    await func_tempmute(ctx.channel, miembro, "7d", False)
+    await func_warn(ctx.channel, miembro, reglaLabel, False)
+    await miembro.send("Hola, has recibido una advertencia y has sido silenciado por 7 días por `" + reglaLabel + "` dentro del servidor de **" + ctx.guild.name + "**. Te recomendamos leer las reglas del servidor y las Directivas de la comunidad de Discord https://discord.com/guidelines para no tener mas inconvenientes.")
+    return
+  if medidaID == "M4":
+    await func_tempmute(ctx.channel, miembro, "30d", False)
+    await func_warn(ctx.channel, miembro, reglaLabel, False)
+    await miembro.send("Hola, has recibido una advertencia y has sido silenciado por 30 días por `" + reglaLabel + "` dentro del servidor de **" + ctx.guild.name + "**. Te recomendamos leer las reglas del servidor y las Directivas de la comunidad de Discord https://discord.com/guidelines para no tener mas inconvenientes.")
+    return
+  if medidaID == "M5":
+    items = await QueryGET("SELECT * FROM muterole WHERE guild_id = '" + str(ctx.guild.id) + "'")
+
+    if len(items) == 0:
+      await ctx.send("Error. No posees un rol de Muteado asignado, para asignar uno el administrador debe utiliza el comando `setmuterol`.")
+    else:
+      role = get(miembro.guild.roles, id=int(items[0][1]))
+      await miembro.add_roles(role)
+
+      #c.execute ("SELECT * FROM channel_log WHERE guild_id = '" + str(ctx.guild.id) + "'")
+      #items = c.fetchall()
+      items = await QueryGET("SELECT * FROM channel_log WHERE guild_id = '" + str(ctx.guild.id) + "'")
+
+      if len(items) > 0:
+        channel = bot.get_channel(int(items[0][1]))
+        embed = discord.Embed(
+        title = '**MUTE**',
+        description = "Miembro: <@" + str(miembro.id) + ">\n Por: <@" + str(ctx.author.id) + ">",
+        colour = discord.Colour.from_rgb(219, 0, 255)
+        )
+        embed.set_thumbnail(url=miembro.avatar_url)
+        await channel.send(embed=embed)
+    
+    await func_warn(ctx.channel, miembro, reglaLabel, False)
+    await miembro.send("Hola, has recibido una advertencia y has sido silenciado permanentemente por `" + reglaLabel + "` dentro del servidor de **" + ctx.guild.name + "**. Te recomendamos leer las reglas del servidor y las Directivas de la comunidad de Discord https://discord.com/guidelines para no tener mas inconvenientes.")
+    return
+  if medidaID == "M6":
+    await func_warn(ctx.channel, miembro, reglaLabel, False)
+    await miembro.send("Hola, has recibido una advertencia y has sido baneado permanentemente por `" + reglaLabel + "` dentro del servidor de **" + ctx.guild.name + "**. Te recomendamos leer las reglas del servidor y las Directivas de la comunidad de Discord https://discord.com/guidelines para no tener mas inconvenientes.")
+    await miembro.ban(reason = "Shiro-san Ban by " + ctx.author.name)
+
+    #LOG
+    items = await QueryGET("SELECT * FROM channel_log WHERE guild_id = '" + str(ctx.guild.id) + "'")
+
+    if len(items) > 0:
+      channel = bot.get_channel(int(items[0][1]))
+      embed = discord.Embed(
+      title = '**BAN**',
+      description = "Miembro: <@" + str(miembro.id) + ">\n Por: <@" + str(ctx.author.id) + ">",
+      colour = discord.Colour.from_rgb(219, 0, 255)
+      )
+      embed.set_thumbnail(url=miembro.avatar_url)
+      await channel.send(embed=embed)
+    return
+
+###################################### UTILERIA ######################################
 
 @bot.event
 async def on_voice_state_update(member, before, after):
