@@ -3023,14 +3023,17 @@ async def on_raw_reaction_add(payload):
         return
 
       if "IA:RES! " not in msg.content:
-        texto1 = await limpiarTextoDiscord(msg.content)
-        texto2 = await limpiarTextoDiscord(message.content)
+        remover2 = msg.content.find("IA:ATCH!")
+        attach = msg.content[remover2 + 9 : len(msg.content) : ]
+
+        remover3 = msg.content.find("IA:RES!")
+        res = msg.content[0 : remover2 : ]
 
         if texto1 != "" or texto1 !=  " ":
            if texto2 != "" or texto2 !=  " ":
             nuevo = [
-            texto1,
-            texto2,
+            res,
+            attach,
             ]
             chatbot.train(nuevo)
       else:
