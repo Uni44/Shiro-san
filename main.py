@@ -3015,6 +3015,39 @@ async def on_raw_reaction_add(payload):
                         payload.guild_id).roles, id=x['remove_role_id'])
                       await payload.member.remove_roles(role2)
 
+    if payload.channel_id == 915726741237026816:
+      channel = bot.get_channel(915726741237026816)
+      msg = await channel.fetch_message(payload.message_id)
+
+      if "IA:ATCH!" not in msg.content:
+        return
+
+      if "IA:RES! " not in msg.content:
+        texto1 = await limpiarTextoDiscord(msg.content)
+        texto2 = await limpiarTextoDiscord(message.content)
+
+        if texto1 != "" or texto1 !=  " ":
+           if texto2 != "" or texto2 !=  " ":
+            nuevo = [
+            texto1,
+            texto2,
+            ]
+            chatbot.train(nuevo)
+      else:
+        remover2 = msg.content.find("IA:ATCH!")
+        attach = msg.content[remover2 + 9 : len(msg.content) : ]
+
+        remover3 = msg.content.find("IA:RES!")
+        res = msg.content[remover3 + 8 : remover2 : ]
+
+        nuevo = [
+          res,
+          attach,
+          ]
+        chatbot.train(nuevo)
+      
+      await msg.reply("Listo. nuevo mensaje aprendido.")
+
 @bot.event
 async def on_raw_reaction_remove(payload):
 
@@ -3212,6 +3245,9 @@ async def on_message(message):
                   texto1 = await limpiarTextoDiscord(message.reference.cached_message.content)
                   texto2 = await limpiarTextoDiscord(message.content)
 
+                  if len(message.attachments) > 0:
+                    await IASendVerification(texto2, message)
+
                   if texto1 != "" or texto1 !=  " ":
                     if texto2 != "" or texto2 !=  " ":
                       nuevo = [
@@ -3219,6 +3255,13 @@ async def on_message(message):
                         texto2,
                         ]
                       chatbot.train(nuevo)
+        else:
+          if len(message.attachments) > 0 and message.reference.cached_message:
+            ina = random.randint(0, 1)
+
+            if ina == 0:
+              await IASendVerification("IA:RES! " + message.reference.cached_message.content, message)
+
       else:
         if not "@everyone" in message.content and not "@here" in message.content:
           #modulo chattbot
@@ -3232,26 +3275,18 @@ async def on_message(message):
             items = await QueryGET("SELECT * FROM chat_ia_ops WHERE guild_id = '" + str(message.guild.id) + "' AND option = 'disable'")
 
             if len(items) == 0:
-              respuesta = "**BOT INTERNAL** N/A"
+              if len(message.attachments) > 0:
+                await IASendVerification(mensaje_puro, message)
 
-              @force_async
-              def res():
-                respuesta = chatbot.get_response(mensaje_puro)
-                return respuesta
-
-              futures = list(map(lambda x: res(), range(1)))
-              restaa = await asyncio.gather(*futures)
-              restaa = str(restaa)[17 : len(restaa) -3 : ]
-              respuesta = restaa
-
-              if respuesta == "**BOT INTERNAL** N/A":
-                respuesta = "auch encontre un bug en mi, ayuda"
-
-              #respuesta = chatbot.get_response(mensaje_puro)
-
-              #await message.channel.send("<@" + str(message.author.id) + "> " + str(respuesta))
-              await message.reply(str(respuesta))
+              await IAGetResponse(mensaje_puro, message)
               continuar_mencion_normal = False
+          else:
+            if message.reference:
+              if len(message.attachments) > 0 and message.reference.cached_message:
+                await IASendVerification("IA:RES! " + message.reference.cached_message.content, message)
+
+                await IAGetResponse("meme", message)
+                continuar_mencion_normal = False
 
           #mencion normal
 
@@ -3478,7 +3513,47 @@ async def limpiarTextoDiscord(texto: str):
         mensaje_puro = mensaje_puro[0 : remover : ] + mensaje_puro[remover2 + 1 : :]
 
     remover = mensaje_puro.find("<:")
+
+  while remover != -1:
+    remover2 = mensaje_puro.find(">")
+
+    if remover2 == -1:
+      remover = -1
+    else:
+      if len(mensaje_puro) > remover:
+        mensaje_puro = mensaje_puro[0 : remover : ] + mensaje_puro[remover2 + 1 : :]
+
+    remover = mensaje_puro.find("<#")
+  
   return mensaje_puro
+
+async def IAGetResponse(texto: str, message):
+  items = await QueryGET("SELECT * FROM chat_ia_ops WHERE guild_id = '" + str(message.guild.id) + "' AND option = 'disable'")
+
+  if len(items) == 0:
+    respuesta = "**BOT INTERNAL** N/A"
+
+  @force_async
+  def res():
+    respuesta = chatbot.get_response(texto)
+    return respuesta
+
+  futures = list(map(lambda x: res(), range(1)))
+  restaa = await asyncio.gather(*futures)
+  restaa = str(restaa)[17 : len(restaa) -3 : ]
+  respuesta = restaa
+
+  if respuesta == "**BOT INTERNAL** N/A":
+    respuesta = "auch encontre un bug en mi, ayuda"
+
+  #respuesta = chatbot.get_response(mensaje_puro)
+
+  #await message.channel.send("<@" + str(message.author.id) + "> " + str(respuesta))
+  await message.reply(str(respuesta))
+
+async def IASendVerification(texto: str, message):
+  channel = bot.get_channel(915726741237026816)
+  await channel.send(texto + " IA:ATCH! " + message.attachments[0].url)
 
 # Run our bot
 bot.run(str(TOKEN)) # Make sure you paste the CORRECT token in the "./data/Token.txt" file
