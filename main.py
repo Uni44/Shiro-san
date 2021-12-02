@@ -3022,12 +3022,12 @@ async def on_raw_reaction_add(payload):
       if "IA:ATCH!" not in msg.content:
         return
 
-      if "IA:RES! " not in msg.content:
+      if "IA:RES!" not in msg.content:
         remover2 = msg.content.find("IA:ATCH!")
         attach = msg.content[remover2 + 9 : len(msg.content) : ]
 
         remover3 = msg.content.find("IA:RES!")
-        res = msg.content[0 : remover2 : ]
+        res = msg.content[0 : remover2 - 1 : ]
 
         nuevo = [
           res,
@@ -3039,7 +3039,7 @@ async def on_raw_reaction_add(payload):
         attach = msg.content[remover2 + 9 : len(msg.content) : ]
 
         remover3 = msg.content.find("IA:RES!")
-        res = msg.content[remover3 + 8 : remover2 : ]
+        res = msg.content[remover3 + 8 : remover2 - 1 : ]
 
         nuevo = [
           res,
