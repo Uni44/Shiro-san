@@ -3029,13 +3029,11 @@ async def on_raw_reaction_add(payload):
         remover3 = msg.content.find("IA:RES!")
         res = msg.content[0 : remover2 : ]
 
-        if texto1 != "" or texto1 !=  " ":
-           if texto2 != "" or texto2 !=  " ":
-            nuevo = [
-            res,
-            attach,
-            ]
-            chatbot.train(nuevo)
+        nuevo = [
+          res,
+          attach,
+        ]
+        chatbot.train(nuevo)
       else:
         remover2 = msg.content.find("IA:ATCH!")
         attach = msg.content[remover2 + 9 : len(msg.content) : ]
