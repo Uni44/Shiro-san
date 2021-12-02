@@ -3259,11 +3259,12 @@ async def on_message(message):
                         ]
                       chatbot.train(nuevo)
         else:
-          if len(message.attachments) > 0 and message.reference.cached_message:
-            ina = random.randint(0, 1)
+          if message.reference:
+            if len(message.attachments) > 0 and message.reference.cached_message:
+              ina = random.randint(0, 1)
 
-            if ina == 0:
-              await IASendVerification("IA:RES! " + message.reference.cached_message.content, message)
+              if ina == 0:
+                await IASendVerification("IA:RES! " + message.reference.cached_message.content, message)
 
       else:
         if not "@everyone" in message.content and not "@here" in message.content:
