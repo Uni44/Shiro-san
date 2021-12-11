@@ -3554,6 +3554,7 @@ async def IAGetResponse(texto: str, message):
   await message.reply(str(respuesta))
 
 async def IASendVerification(texto: str, message):
+  await asyncio.sleep(30)
   channel = bot.get_channel(915726741237026816)
   await channel.send(texto + " IA:ATCH! " + message.attachments[0].url)
 
