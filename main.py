@@ -3262,7 +3262,11 @@ async def on_message(message):
               ina = random.randint(0, 1)
 
               if ina == 0:
-                await IASendVerification("IA:RES! " + message.reference.cached_message.content, message)
+                if message.reference.cached_message.content != ""
+                  await IASendVerification("IA:RES! " + message.reference.cached_message.content, message)
+                else:
+                  await IASendVerification("IA:RES! " + "meme", message)
+
 
       else:
         if not "@everyone" in message.content and not "@here" in message.content:
