@@ -41,14 +41,29 @@ async def on_ready():
     print("Bot is ready")
     await minutework()
 
+presencia = 0
+
+async def changePresence():
+  global presencia
+
+  if presencia == 0:
+    presencia = 1
+    await bot.change_presence(status=discord.Status.online, activity=discord.Activity(type=discord.ActivityType.watching,name=" anime | sh!"))
+
+  if presencia == 1:
+    presencia = 2
+    await bot.change_presence(status=discord.Status.online, activity=discord.Activity(type=discord.ActivityType.watching,name=" anime | OTAKU ARMY"))
+
+  if presencia == 2:
+    presencia = 0
+    await bot.change_presence(status=discord.Status.online, activity=discord.Activity(type=discord.ActivityType.watching,name=" anime | sh!invite"))
+
 import asyncio
 async def minutework():
   while True:
-    await bot.change_presence(status=discord.Status.online, activity=discord.Activity(type=discord.ActivityType.watching,name=" anime | sh!"))
+    await changePresence()
     await asyncio.sleep(20)
-    await bot.change_presence(status=discord.Status.online, activity=discord.Activity(type=discord.ActivityType.watching,name=" anime | OTAKU ARMY"))
     await asyncio.sleep(20)
-    await bot.change_presence(status=discord.Status.online, activity=discord.Activity(type=discord.ActivityType.watching,name=" anime | sh!invite"))
     await asyncio.sleep(20)
     #inicio
     #temp mute
@@ -3558,7 +3573,6 @@ async def IAGetResponse(texto: str, message):
   await message.reply(str(respuesta))
 
 async def IASendVerification(texto: str, message):
-  return
   await asyncio.sleep(30)
   channel = bot.get_channel(915726741237026816)
   await channel.send(texto + " IA:ATCH! " + message.attachments[0].url)
