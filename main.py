@@ -49,14 +49,14 @@ async def changePresence():
   if presencia == 0:
     presencia = 1
     await bot.change_presence(status=discord.Status.online, activity=discord.Activity(type=discord.ActivityType.watching,name=" anime | sh!"))
-
-  if presencia == 1:
-    presencia = 2
-    await bot.change_presence(status=discord.Status.online, activity=discord.Activity(type=discord.ActivityType.watching,name=" anime | OTAKU ARMY"))
-
-  if presencia == 2:
-    presencia = 0
-    await bot.change_presence(status=discord.Status.online, activity=discord.Activity(type=discord.ActivityType.watching,name=" anime | sh!invite"))
+  else:
+    if presencia == 1:
+      presencia = 2
+      await bot.change_presence(status=discord.Status.online, activity=discord.Activity(type=discord.ActivityType.watching,name=" anime | OTAKU ARMY"))
+    else:
+      if presencia == 2:
+        presencia = 0
+        await bot.change_presence(status=discord.Status.online, activity=discord.Activity(type=discord.ActivityType.watching,name=" anime | sh!invite"))
 
 import asyncio
 async def minutework():
