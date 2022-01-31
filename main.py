@@ -2756,6 +2756,22 @@ async def mod_medidas(ctx, miembro, mensaje, reglaID, reglaLabel, medidaID, medi
       await channel.send(embed=embed)
     return
 
+## INFO
+
+@bot.command(name = "userinfo_dc")
+async def userinfo_dc(ctx, user: discord.User):
+  if ctx.author.id != OWNERID:
+    return
+  miembro = user
+  if user:
+    embed = discord.Embed(
+    title = '**INFO**',
+    description = "Nombre: " + miembro.display_name + "\n Creación: " + str(miembro.created_at) + "\n Discriminador: " + str(miembro.discriminator) + "\n ID: " + str(miembro.id) + "\n Servidores compartidos: " + str(len(miembro.mutual_guilds)),
+    colour = discord.Colour.from_rgb(255, 0, 255)
+          )
+    embed.set_thumbnail(url=miembro.avatar_url)
+    await ctx.send(embed=embed)
+
 ###################################### UTILERIA ######################################
 
 @bot.event
