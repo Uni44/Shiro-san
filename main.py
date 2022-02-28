@@ -1477,8 +1477,11 @@ async def level(ctx):
       await ctx.send("Listo. Los niveles fueron desactivados.")
     #conn.commit()
 
+XPLevel = 100
+
 @bot.command(name = "level")
 async def level(ctx, miembro: discord.Member = None):
+  global XPLevel
   miembrose = ctx.author
 
   if miembro != None:
@@ -1495,17 +1498,19 @@ async def level(ctx, miembro: discord.Member = None):
   else:
     points = int(items[0][2])
 
-  level = int(points / 30)
+  level = int(points / XPLevel)
 
   embed = discord.Embed(
   title = '**' + miembrose.name + '**',
-  description = "Nivel: **" + str(level) + "**\n XP: " + str(points) + "/" + str(int((level + 1) * 30)),
+  description = "Nivel: **" + str(level) + "**\n XP: " + str(points) + "/" + str(int((level + 1) * XPLevel)),
   colour = discord.Colour.from_rgb(219, 0, 255)
   )
   embed.set_thumbnail(url=miembrose.avatar_url)
   await ctx.send(embed=embed)
 
 async def add_points(user: discord.User, guild: discord.Guild, points: int):
+  global XPLevel
+  
   #c.execute ("SELECT * FROM levels WHERE guild_id = '" + str(guild.id) + "' AND user_id = '" + str(user.id) + "'")
   #items = c.fetchall()
   items = await QueryGET("SELECT * FROM levels WHERE guild_id = '" + str(guild.id) + "' AND user_id = '" + str(user.id) + "'")
@@ -1522,7 +1527,7 @@ async def add_points(user: discord.User, guild: discord.Guild, points: int):
   #conn.commit()
 
   ##levels
-  level = int(points2 / 30)
+  level = int(points2 / XPLevel)
   #c.execute ("SELECT * FROM levels_ops_roles WHERE guild_id = '" + str(guild.id) + "'")
   #items = c.fetchall()
   items = await QueryGET("SELECT * FROM levels_ops_roles WHERE guild_id = '" + str(guild.id) + "'")
@@ -3478,7 +3483,7 @@ chatbot = ChatBot("Kanna",
         },
         {
             'import_path': 'chatterbot.logic.LowConfidenceAdapter',
-            'threshold': 0.3,
+            'threshold': 0.6,
             'default_response': 'Disculpa, no te he entendido bien. ¿Puedes ser más específico?.'
         }
         #{
