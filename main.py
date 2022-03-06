@@ -17,6 +17,8 @@ from discord.ext import commands
 
 from discord_components import DiscordComponents, Button, ButtonStyle
 
+from discord.ext import slash
+
 intents=intents=discord.Intents.all()
 intents.presences = True
 intents.members = True
@@ -29,7 +31,8 @@ TOKEN = os.environ['TOKEN']#TokenFile.read()
 OWNERID = 269549755850293249
 
 # Define "bot"
-bot = commands.Bot(command_prefix = "sh!", case_insensitive=False, intents=intents)
+bot = slash.SlashBot(command_prefix = "oc!", case_insensitive=False, intents=intents, debug_guild=848833707426578472)
+#bot = commands.Bot(command_prefix = "oc!", case_insensitive=False, intents=intents)
 DiscordComponents(bot)
 
 bot.remove_command("help")
@@ -186,20 +189,32 @@ async def on_command_error(ctx,error):
     color=discord.Color.red())
     if isinstance(error, commands.CommandNotFound):
       embed.add_field(name=f':x: Error', value=f'Ese comando no existe.')
-      await ctx.send(embed=embed)
+      if hasattr(ctx, 'respond'):
+        await ctx.respond(embed=embed)
+      else:
+        await ctx.send(embed=embed)
     else:
       if isinstance(error, commands.MissingPermissions):
         embed.add_field(name=f':x: Error', value=f'No tengo los permisos necesarios.')
-        await ctx.send(embed=embed)
+        if hasattr(ctx, 'respond'):
+          await ctx.respond(embed=embed)
+        else:
+          await ctx.send(embed=embed)
       else:
         if isinstance(error, commands.MemberNotFound):
           embed.add_field(name=f':x: Error', value=f'El miembro no fue encontrado.')
-          await ctx.send(embed=embed)
+          if hasattr(ctx, 'respond'):
+            await ctx.respond(embed=embed)
+          else:
+            await ctx.send(embed=embed)
         else:
           embed.add_field(name = f':x: Error', value = f"```{error}```")
           if permisosCheck(ctx.author, 2):
-            await ctx.send(embed = embed)
-          channel = bot.get_channel(848814902478897203)
+            if hasattr(ctx, 'respond'):
+              await ctx.respond(embed=embed)
+            else:
+              await ctx.send(embed=embed)
+          channel = bot.get_channel(849511366272483358)
           await channel.send("<@" + str(ctx.author.id) + "> " + "<#" + str(ctx.channel.id) + ">", embed = embed)
           raise error
 
@@ -243,6 +258,33 @@ for filename in os.listdir('./Cogs'):
 #  if permisosCheck(ctx.author, 4):
 #    await cmd_embed.ex(nombre, channelname, ctx, bot)
 
+
+
+
+
+
+msg_opt_say = slash.Option(
+    description='Mensaje',
+    required=True)
+
+msg_opt_say2 = slash.Option(
+    description='Canal a mandar el mensaje',
+    type=discord.ext.slash.ApplicationCommandOptionType.CHANNEL,
+    required=True)
+
+@bot.slash_cmd()
+async def say(
+    ctx: slash.Context,
+    mensaje: msg_opt_say,
+):
+    """Enviar un mensaje en el mismo canal"""
+    if permisosCheck(ctx.author, 4):
+      channel = bot.get_channel(ctx.channel.id)
+      await channel.send(mensaje)
+      await ctx.respond("Listo.", ephemeral=True)
+    else:
+      await ctx.respond("¡No puedes hacer eso! <:tohru:809932675175284807>", ephemeral=True)
+
 @bot.command(name = "say")
 async def say_(ctx, *texto:str):
   if permisosCheck(ctx.author, 2):
@@ -253,14 +295,56 @@ async def say_(ctx, *texto:str):
     texto = ' '.join(texto)
     await cmd_say.ex(texto, ctx)
 
+@bot.slash_cmd()
+async def sayto(
+    ctx: slash.Context,
+    canal: msg_opt_say2,
+    mensaje: msg_opt_say
+):
+    """Enviar un mensaje a un canal especifico"""
+    if permisosCheck(ctx.author, 4):
+      channel = canal
+      await channel.send(mensaje)
+      await ctx.respond("Listo.")
+    else:
+      await ctx.respond("¡No puedes hacer eso! <:tohru:809932675175284807>", ephemeral=True)
+
 @bot.command(name = "sayto")
 async def sayto_(ctx, channel: discord.TextChannel, texto: str):
   if permisosCheck(ctx.author, 2):
     await cmd_sayto.ex(channel, texto, ctx, bot)
 
+
+
+
+
+
+@bot.slash_cmd()
+async def memide(
+    ctx: slash.Context
+):
+    """Te diré cuanto te mide"""
+    await ctx.respond("A <@" + str(ctx.author.id) + "> le mide " + str(random.randint(0, 50)) + " cm")
+
 @bot.command(name = "memide")
 async def memide_(ctx):
   await ctx.send("A <@" + str(ctx.author.id) + "> le mide " + str(random.randint(0, 50)) + " cm")
+
+
+
+
+
+
+@bot.slash_cmd()
+async def codigo(
+    ctx: slash.Context
+):
+    """Te diré cuanto te mide"""
+    if random.randint(0, 1) == 0: #codigo de 5
+      await ctx.respond("<@" + str(ctx.author.id) + "> su codigo nuclear esta listo: " + str(random.randint(1, 9)) + str(random.randint(0, 9)) + str(random.randint(0, 9)) + str(random.randint(0, 9)) + str(random.randint(0, 9)))
+    else: #codigo de 6
+      await ctx.respond("<@" + str(ctx.author.id) + "> su codigo nuclear esta listo: " + str(random.randint(1, 3)) + str(random.randint(0, 9)) + str(random.randint(0, 9)) + str(random.randint(0, 9)) + str(random.randint(0, 9)) + str(random.randint(0, 9)))
+
 
 @bot.command(name = "codigo")
 async def codigo_(ctx):
@@ -268,6 +352,11 @@ async def codigo_(ctx):
     await ctx.send("<@" + str(ctx.author.id) + "> su codigo nuclear esta listo: " + str(random.randint(1, 9)) + str(random.randint(0, 9)) + str(random.randint(0, 9)) + str(random.randint(0, 9)) + str(random.randint(0, 9)))
   else: #codigo de 6
     await ctx.send("<@" + str(ctx.author.id) + "> su codigo nuclear esta listo: " + str(random.randint(1, 3)) + str(random.randint(0, 9)) + str(random.randint(0, 9)) + str(random.randint(0, 9)) + str(random.randint(0, 9)) + str(random.randint(0, 9)))
+
+
+
+
+
 
 from discord.utils import get
 #@bot.command(name = "giveroleall")
@@ -309,8 +398,57 @@ from discord.utils import get
 #      else:
 #        await ctx.send("Estados disponibles si y no.")
 
+
+
+
+
+
+msg_opt_reactrole = slash.Option(
+    description='Emoji',
+    required=True)
+
+msg_opt_reactrole2 = slash.Option(
+    description='Mensaje',
+    required=True)
+
+msg_opt_reactrole1 = slash.Option(
+    description='Rol',
+    type=discord.ext.slash.ApplicationCommandOptionType.ROLE,
+    required=True)
+
+@bot.slash_cmd()
+async def reactrole(
+    ctx: slash.Context,
+    emoji: msg_opt_reactrole,
+    rol: msg_opt_reactrole1,
+    mensaje: msg_opt_reactrole2
+):
+    """Crear un mensaje con una reacción que da un rol"""
+    if permisosCheck(ctx.author, 4):
+      emb = discord.Embed(description=mensaje)
+
+      channel = bot.get_channel(ctx.channel.id)
+      msg = await channel.send(embed=emb)
+      await msg.add_reaction(emoji)
+
+      with open('reactrole.json') as json_file:
+          data = json.load(json_file)
+
+          new_react_role = {'role_name': rol.name, 
+          'role_id': rol.id,
+          'emoji': emoji,
+          'message_id': msg.id,
+          'remove_role_id': "null"}
+
+          data.append(new_react_role)
+
+      with open('reactrole.json', 'w') as f:
+          json.dump(data, f, indent=4)
+    else:
+      await ctx.respond("¡No puedes hacer eso! <:tohru:809932675175284807>", ephemeral=True)
+
 @bot.command(name = "reactrole")
-async def reactrole(ctx, emoji, role: discord.Role, *, message):
+async def reactrole_(ctx, emoji, role: discord.Role, *, message):
   if permisosCheck(ctx.author, 2):
     emb = discord.Embed(description=message)
     msg = await ctx.channel.send(embed=emb)
@@ -330,6 +468,11 @@ async def reactrole(ctx, emoji, role: discord.Role, *, message):
     with open('reactrole.json', 'w') as f:
         json.dump(data, f, indent=4)
 
+
+
+
+
+      
 #@bot.command(name = "msg")
 #async def msg (ctx, user: discord.User, texto: str):
 #  if permisosCheck(ctx.author, 3):
@@ -337,7 +480,17 @@ async def reactrole(ctx, emoji, role: discord.Role, *, message):
 #    channel = bot.get_channel(846517618973212673)
 #    await channel.send(" <@" + str(bot.user.id) + "> <@" + str(user.id) + ">: " + texto)
 
+
+
+
+
+      
 ###EXTRA
+
+
+
+
+
 
 import requests
 import shutil
@@ -379,10 +532,41 @@ async def list_guild(ctx):
      texto = texto + "\nNombre: " + guild.name + "\nID: " + str(guild.id)
     await ctx.send(texto)
 
+
+
+
+    
 ###SHIRO-SAN NEW COMANDOS
 
+
+
+
+
+
+msg_opt_reactrole1 = slash.Option(
+    description='Rol',
+    type=discord.ext.slash.ApplicationCommandOptionType.ROLE,
+    required=True)
+
+@bot.slash_cmd()
+async def joinrole(
+    ctx: slash.Context,
+    rol: msg_opt_reactrole1
+):
+    """Añadir un rol cuando alguien se une al servidor"""
+    if permisosCheck(ctx.author, 4):
+      items = await QueryGET("SELECT * FROM joinrole WHERE guild_id = '" + str(ctx.guild.id) + "'")
+
+      if len(items) == 0:
+        await QueryEX("INSERT INTO joinrole VALUES ('" + str(ctx.guild.id) + "', '" + str(rol.id) + "')")
+        await ctx.respond("Listo. Rol auto asignado guardado, para eliminar el rol utiliza `joinrole-clear`.")
+      else:
+        await ctx.respond("Ya hay un rol auto asignado. Utiliza `joinrole-clear` para eliminar el rol.")
+    else:
+      await ctx.respond("¡No puedes hacer eso! <:tohru:809932675175284807>", ephemeral=True)
+
 @bot.command(name = "joinrole")
-async def joinrole(ctx, role: discord.Role):
+async def joinrole_(ctx, role: discord.Role):
   if permisosCheck(ctx.author, 2):
     #c.execute ("SELECT * FROM joinrole WHERE guild_id = '" + str(ctx.guild.id) + "'")
     #items = c.fetchall()
@@ -396,8 +580,24 @@ async def joinrole(ctx, role: discord.Role):
       await ctx.send("Ya hay un rol auto asignado. Utiliza `joinrole-clear` para eliminar el rol.")
     #conn.commit()
 
+@bot.slash_cmd()
+async def joinrole_clear(
+    ctx: slash.Context
+):
+    """Eliminar rol autoasignado al unirse al servidor"""
+    if permisosCheck(ctx.author, 4):
+      items = await QueryGET("SELECT * FROM joinrole WHERE guild_id = '" + str(ctx.guild.id) + "'")
+
+      if len(items) == 0:
+        await ctx.respond("No hay un rol auto asignado. Utiliza `joinrole` para añadir un rol.")
+      else:
+        await QueryEX("DELETE FROM joinrole WHERE guild_id = '" + str(ctx.guild.id) + "'")
+        await ctx.respond("Listo. Rol auto asignado eliminado.")
+    else:
+      await ctx.respond("¡No puedes hacer eso! <:tohru:809932675175284807>", ephemeral=True)
+
 @bot.command(name = "joinrole-clear")
-async def joinrole_clear(ctx):
+async def joinrole_clear_(ctx):
   if permisosCheck(ctx.author, 2):
     #c.execute ("SELECT * FROM joinrole WHERE guild_id = '" + str(ctx.guild.id) + "'")
     #items = c.fetchall()
@@ -410,6 +610,11 @@ async def joinrole_clear(ctx):
       await QueryEX("DELETE FROM joinrole WHERE guild_id = '" + str(ctx.guild.id) + "'")
       await ctx.send("Listo. Rol auto asignado eliminado.")
     #conn.commit()
+
+
+
+
+
 
 @bot.command(name = "legacy-response-list")
 async def response_list(ctx):
@@ -549,8 +754,43 @@ async def response_add(ctx, guild_id: int, veces_para_activar: int, palabra_clav
       #conn.commit()
       await ctx.send("Listo. Ahora cada " + str(veces_para_activar) + " vez/veces que alguien ponga `" + palabra_clave.lower() + "` respondere con `" + respuesta + "`.")
 
+
+
+
+
+msg_opt_ban = slash.Option(
+    description='Miembro del servidor',
+    type=discord.ext.slash.ApplicationCommandOptionType.USER,
+    required=True)
+
+@bot.slash_cmd()
+async def ban(
+    ctx: slash.Context,
+    miembro: msg_opt_ban
+):
+    """Banear a alguien del servidor mediante el bot"""
+    if permisosCheck(ctx.author, 3):
+      await miembro.ban(reason = "Shiro-san Ban by " + ctx.author.name)
+      await ctx.respond("Listo. El Miembro <@" + str(miembro.id) + "> fue baneado con exito.")
+
+      #c.execute ("SELECT * FROM channel_log WHERE guild_id = '" + str(ctx.guild.id) + "'")
+      #items = c.fetchall()
+      items = await QueryGET("SELECT * FROM channel_log WHERE guild_id = '" + str(ctx.guild.id) + "'")
+
+      if len(items) > 0:
+        channel = bot.get_channel(int(items[0][1]))
+        embed = discord.Embed(
+        title = '**BAN**',
+        description = "Miembro: <@" + str(miembro.id) + ">\n Por: <@" + str(ctx.author.id) + ">",
+        colour = discord.Colour.from_rgb(219, 0, 255)
+        )
+        embed.set_thumbnail(url=miembro.avatar_url)
+        await channel.send(embed=embed)
+    else:
+      await ctx.respond("¡No puedes hacer eso! <:tohru:809932675175284807>", ephemeral=True)
+
 @bot.command(name = "ban")
-async def ban(ctx, miembro: discord.Member):
+async def ban_(ctx, miembro: discord.Member):
   if permisosCheck(ctx.author, 1):
     await miembro.ban(reason = "Shiro-san Ban by " + ctx.author.name)
     await ctx.send("Listo. El Miembro <@" + str(miembro.id) + "> fue baneado con exito.")
@@ -569,8 +809,34 @@ async def ban(ctx, miembro: discord.Member):
       embed.set_thumbnail(url=miembro.avatar_url)
       await channel.send(embed=embed)
 
+@bot.slash_cmd()
+async def kick(
+    ctx: slash.Context,
+    miembro: msg_opt_ban
+):
+    """Expulsar a alguien del servidor mediante el bot"""
+    if permisosCheck(ctx.author, 3):
+      await miembro.kick(reason = "Shiro-san Kick by " + ctx.author.name)
+      await ctx.respond("Listo. El Miembro <@" + str(miembro.id) + "> fue expulsado con exito.")
+      
+      #c.execute ("SELECT * FROM channel_log WHERE guild_id = '" + str(ctx.guild.id) + "'")
+      #items = c.fetchall()
+      items = await QueryGET("SELECT * FROM channel_log WHERE guild_id = '" + str(ctx.guild.id) + "'")
+  
+      if len(items) > 0:
+        channel = bot.get_channel(int(items[0][1]))
+        embed = discord.Embed(
+        title = '**KICK**',
+        description = "Miembro: <@" + str(miembro.id) + ">\n Por: <@" + str(ctx.author.id) + ">",
+        colour = discord.Colour.from_rgb(219, 0, 255)
+        )
+        embed.set_thumbnail(url=miembro.avatar_url)
+        await channel.send(embed=embed)
+    else:
+      await ctx.respond("¡No puedes hacer eso! <:tohru:809932675175284807>", ephemeral=True)
+
 @bot.command(name = "kick")
-async def kick(ctx, miembro: discord.Member):
+async def kick_(ctx, miembro: discord.Member):
   if permisosCheck(ctx.author, 1):
     await miembro.kick(reason = "Shiro-san Kick by " + ctx.author.name)
     await ctx.send("Listo. El Miembro <@" + str(miembro.id) + "> fue expulsado con exito.")
@@ -589,8 +855,21 @@ async def kick(ctx, miembro: discord.Member):
       embed.set_thumbnail(url=miembro.avatar_url)
       await channel.send(embed=embed)
 
+
+
+
+
+
+@bot.slash_cmd()
+async def userinfo(
+    ctx: slash.Context,
+    miembro: msg_opt_ban
+):
+    """Ver información del miembro"""
+    await user_info(ctx, miembro, True)
+  
 @bot.command(name = "userinfo")
-async def user_info(ctx, miembro: discord.Member):
+async def user_info(ctx, miembro: discord.Member, slash = False):
   if permisosCheck(ctx.author, 1):
 
     rol = ""
@@ -624,10 +903,23 @@ async def user_info(ctx, miembro: discord.Member):
     embed.add_field(name="Discriminador", value=miembro.discriminator)
     embed.add_field(name="ID", value=str(miembro.id))
     embed.set_thumbnail(url=miembro.avatar_url)
-    await ctx.send(embed=embed)
+    if slash:
+      await ctx.respond(embed=embed)
+    else:
+      await ctx.send(embed=embed)
+  else:
+    if slash:
+      await ctx.respond("¡No puedes hacer eso! <:tohru:809932675175284807>", ephemeral=True)
+
+@bot.slash_cmd()
+async def serverinfo(
+    ctx: slash.Context
+):
+    """Ver información del servidor"""
+    await server_info(ctx, True)
 
 @bot.command(name = "serverinfo")
-async def server_info(ctx):
+async def server_info(ctx, slash = False):
   if permisosCheck(ctx.author, 1):
     embed = discord.Embed(
     title = 'Información de ' + ctx.author.guild.name,
@@ -642,7 +934,18 @@ async def server_info(ctx):
     embed.add_field(name="Canales de voz", value=len(ctx.guild.voice_channels))
     embed.add_field(name="ID", value=str(ctx.guild.id))
     embed.set_thumbnail(url=ctx.guild.icon_url)
-    await ctx.send(embed=embed)
+    if slash:
+      await ctx.respond(embed=embed)
+    else:
+      await ctx.send(embed=embed)
+  else:
+    if slash:
+      await ctx.respond("¡No puedes hacer eso! <:tohru:809932675175284807>", ephemeral=True)
+
+
+
+
+
 
 @bot.command(name = "clear")
 async def clear(ctx, cantidad: int):
@@ -3448,13 +3751,17 @@ def AntiSpam(name, max):
   return passa
 
 def permisosCheck(author, perm):
+  author = bot.get_guild(author.guild.id).get_member(author.id)
+  
   try:
     if not perms.check(author, perm):
         return False
     return True
   except:
-        return True
-        pass
+    print("Error de permisos")
+    raise Exception
+    #return True
+    #pass
 
 keep_alive()
 
