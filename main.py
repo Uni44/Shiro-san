@@ -31,8 +31,8 @@ TOKEN = os.environ['TOKEN']#TokenFile.read()
 OWNERID = 269549755850293249
 
 # Define "bot"
-bot = slash.SlashBot(command_prefix = "oc!", case_insensitive=False, intents=intents, debug_guild=848833707426578472)
-#bot = commands.Bot(command_prefix = "oc!", case_insensitive=False, intents=intents)
+#bot = slash.SlashBot(command_prefix = "sh!", case_insensitive=False, intents=intents)
+bot = commands.Bot(command_prefix = "sh!", case_insensitive=False, intents=intents)
 DiscordComponents(bot)
 
 bot.remove_command("help")
@@ -214,7 +214,7 @@ async def on_command_error(ctx,error):
               await ctx.respond(embed=embed)
             else:
               await ctx.send(embed=embed)
-          channel = bot.get_channel(849511366272483358)
+          channel = bot.get_channel(848814902478897203)
           await channel.send("<@" + str(ctx.author.id) + "> " + "<#" + str(ctx.channel.id) + ">", embed = embed)
           raise error
 
@@ -272,13 +272,13 @@ msg_opt_say2 = slash.Option(
     type=discord.ext.slash.ApplicationCommandOptionType.CHANNEL,
     required=True)
 
-@bot.slash_cmd()
+#@bot.slash_cmd()
 async def say(
     ctx: slash.Context,
     mensaje: msg_opt_say,
 ):
     """Enviar un mensaje en el mismo canal"""
-    if permisosCheck(ctx.author, 4):
+    if permisosCheck(ctx.author, 2):
       channel = bot.get_channel(ctx.channel.id)
       await channel.send(mensaje)
       await ctx.respond("Listo.", ephemeral=True)
@@ -295,14 +295,14 @@ async def say_(ctx, *texto:str):
     texto = ' '.join(texto)
     await cmd_say.ex(texto, ctx)
 
-@bot.slash_cmd()
+#@bot.slash_cmd()
 async def sayto(
     ctx: slash.Context,
     canal: msg_opt_say2,
     mensaje: msg_opt_say
 ):
     """Enviar un mensaje a un canal especifico"""
-    if permisosCheck(ctx.author, 4):
+    if permisosCheck(ctx.author, 2):
       channel = canal
       await channel.send(mensaje)
       await ctx.respond("Listo.")
@@ -319,7 +319,7 @@ async def sayto_(ctx, channel: discord.TextChannel, texto: str):
 
 
 
-@bot.slash_cmd()
+#@bot.slash_cmd()
 async def memide(
     ctx: slash.Context
 ):
@@ -335,7 +335,7 @@ async def memide_(ctx):
 
 
 
-@bot.slash_cmd()
+#@bot.slash_cmd()
 async def codigo(
     ctx: slash.Context
 ):
@@ -416,7 +416,7 @@ msg_opt_reactrole1 = slash.Option(
     type=discord.ext.slash.ApplicationCommandOptionType.ROLE,
     required=True)
 
-@bot.slash_cmd()
+#@bot.slash_cmd()
 async def reactrole(
     ctx: slash.Context,
     emoji: msg_opt_reactrole,
@@ -424,7 +424,7 @@ async def reactrole(
     mensaje: msg_opt_reactrole2
 ):
     """Crear un mensaje con una reacción que da un rol"""
-    if permisosCheck(ctx.author, 4):
+    if permisosCheck(ctx.author, 2):
       emb = discord.Embed(description=mensaje)
 
       channel = bot.get_channel(ctx.channel.id)
@@ -548,13 +548,13 @@ msg_opt_reactrole1 = slash.Option(
     type=discord.ext.slash.ApplicationCommandOptionType.ROLE,
     required=True)
 
-@bot.slash_cmd()
+#@bot.slash_cmd()
 async def joinrole(
     ctx: slash.Context,
     rol: msg_opt_reactrole1
 ):
     """Añadir un rol cuando alguien se une al servidor"""
-    if permisosCheck(ctx.author, 4):
+    if permisosCheck(ctx.author, 2):
       items = await QueryGET("SELECT * FROM joinrole WHERE guild_id = '" + str(ctx.guild.id) + "'")
 
       if len(items) == 0:
@@ -580,12 +580,12 @@ async def joinrole_(ctx, role: discord.Role):
       await ctx.send("Ya hay un rol auto asignado. Utiliza `joinrole-clear` para eliminar el rol.")
     #conn.commit()
 
-@bot.slash_cmd()
+#@bot.slash_cmd()
 async def joinrole_clear(
     ctx: slash.Context
 ):
     """Eliminar rol autoasignado al unirse al servidor"""
-    if permisosCheck(ctx.author, 4):
+    if permisosCheck(ctx.author, 2):
       items = await QueryGET("SELECT * FROM joinrole WHERE guild_id = '" + str(ctx.guild.id) + "'")
 
       if len(items) == 0:
@@ -763,13 +763,13 @@ msg_opt_ban = slash.Option(
     type=discord.ext.slash.ApplicationCommandOptionType.USER,
     required=True)
 
-@bot.slash_cmd()
+#@bot.slash_cmd()
 async def ban(
     ctx: slash.Context,
     miembro: msg_opt_ban
 ):
     """Banear a alguien del servidor mediante el bot"""
-    if permisosCheck(ctx.author, 3):
+    if permisosCheck(ctx.author, 1):
       await miembro.ban(reason = "Shiro-san Ban by " + ctx.author.name)
       await ctx.respond("Listo. El Miembro <@" + str(miembro.id) + "> fue baneado con exito.")
 
@@ -809,13 +809,13 @@ async def ban_(ctx, miembro: discord.Member):
       embed.set_thumbnail(url=miembro.avatar_url)
       await channel.send(embed=embed)
 
-@bot.slash_cmd()
+#@bot.slash_cmd()
 async def kick(
     ctx: slash.Context,
     miembro: msg_opt_ban
 ):
     """Expulsar a alguien del servidor mediante el bot"""
-    if permisosCheck(ctx.author, 3):
+    if permisosCheck(ctx.author, 1):
       await miembro.kick(reason = "Shiro-san Kick by " + ctx.author.name)
       await ctx.respond("Listo. El Miembro <@" + str(miembro.id) + "> fue expulsado con exito.")
       
@@ -860,7 +860,7 @@ async def kick_(ctx, miembro: discord.Member):
 
 
 
-@bot.slash_cmd()
+#@bot.slash_cmd()
 async def userinfo(
     ctx: slash.Context,
     miembro: msg_opt_ban
@@ -911,7 +911,7 @@ async def user_info(ctx, miembro: discord.Member, slash = False):
     if slash:
       await ctx.respond("¡No puedes hacer eso! <:tohru:809932675175284807>", ephemeral=True)
 
-@bot.slash_cmd()
+#@bot.slash_cmd()
 async def serverinfo(
     ctx: slash.Context
 ):
@@ -947,26 +947,51 @@ async def server_info(ctx, slash = False):
 
 
 
-@bot.command(name = "clear")
-async def clear(ctx, cantidad: int):
-  if permisosCheck(ctx.author, 1):
-    if cantidad > 50:
-      await ctx.send("Solo puedes eliminar 50 mensajes.")
+msg_opt_clear = slash.Option(
+    description='Cantidad de mensajes',
+    required=True)
+
+#@bot.slash_cmd()
+async def clear(
+    ctx: slash.Context,
+    cantidad: msg_opt_clear
+    
+):
+    """Eliminar cantidad de mensajes"""
+    if permisosCheck(ctx.author, 1):
+      if cantidad < 50:
+        channel = bot.get_channel(ctx.channel.id)
+        await channel.purge(limit=cantidad)
+  
+        await ctx.respond("Listo.", ephemeral=True)
+      else:
+        await ctx.respond("Solo se pueden eliminar 50 mensajes <:tohru:809932675175284807>", ephemeral=True)
     else:
+      await ctx.respond("¡No puedes hacer eso! <:tohru:809932675175284807>", ephemeral=True)
+      
+
+@bot.command(name = "clear")
+async def clear_(ctx, cantidad: int):
+  if permisosCheck(ctx.author, 1):
+    if cantidad < 50:
       await ctx.message.delete()
-      passed = 0
-      failed = 0
-      async for msg in ctx.message.channel.history(limit=cantidad):
-            try:
-              await msg.delete()
-              passed += 1
-            except:
-              failed += 1
+      
+      #passed = 0
+      #failed = 0
+      #async for msg in ctx.message.channel.history(limit=cantidad):
+            #try:
+              #await msg.delete()
+              #passed += 1
+            #except:
+              #failed += 1
       #await ctx.send(f"Listo. Eliminados {passed} mensajes. {failed} Fallos")
       #c.execute ("SELECT * FROM channel_log WHERE guild_id = '" + str(ctx.guild.id) + "'")
       #items = c.fetchall()
+  
+      await ctx.channel.purge(limit=cantidad)
+      
       items = await QueryGET("SELECT * FROM channel_log WHERE guild_id = '" + str(ctx.guild.id) + "'")
-
+  
       if len(items) > 0:
         channel = bot.get_channel(int(items[0][1]))
         embed = discord.Embed(
@@ -976,6 +1001,13 @@ async def clear(ctx, cantidad: int):
         )
         embed.set_thumbnail(url=ctx.author.avatar_url)
         await channel.send(embed=embed)
+    else:
+      await ctx.send("Solo se pueden eliminar 50 mensajes.")
+
+
+
+
+
 
 @bot.command(name = "welcome-set")
 async def welcome_set(ctx, channel: discord.TextChannel):
@@ -3757,7 +3789,7 @@ def permisosCheck(author, perm):
     if not perms.check(author, perm):
         return False
     return True
-  except:
+  except Exception:
     print("Error de permisos")
     raise Exception
     #return True
