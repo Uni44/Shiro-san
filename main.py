@@ -279,6 +279,11 @@ async def say(
 ):
     """Enviar un mensaje en el mismo canal"""
     if permisosCheck(ctx.author, 2):
+      censurado = True
+      if censurado == True:
+        mensaje = mensaje.replace("@everyone", "everyone")
+        mensaje = mensaje.replace("@here", "here")
+      
       channel = bot.get_channel(ctx.channel.id)
       await channel.send(mensaje)
       await ctx.respond("Listo.", ephemeral=True)
@@ -303,6 +308,11 @@ async def sayto(
 ):
     """Enviar un mensaje a un canal especifico"""
     if permisosCheck(ctx.author, 2):
+      censurado = True
+      if censurado == True:
+        mensaje = mensaje.replace("@everyone", "everyone")
+        mensaje = mensaje.replace("@here", "here")
+      
       channel = canal
       await channel.send(mensaje)
       await ctx.respond("Listo.")
