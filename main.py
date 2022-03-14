@@ -961,7 +961,7 @@ async def clear(
     if permisosCheck(ctx.author, 1):
       if cantidad < 50:
         channel = bot.get_channel(ctx.channel.id)
-        await channel.purge(limit=cantidad)
+        await channel.purge(limit=int(cantidad))
   
         await ctx.respond("Listo.", ephemeral=True)
       else:
