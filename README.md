@@ -1,4 +1,5 @@
 # Shiro-san
+![Nekotina](https://cdn.discordapp.com/attachments/756259841819017372/955172068167675924/dc_cartel3.png)
 > Contacto: otakuarmy.contacto@gmail.com
 
 Shiro-san esta creada con mucho amor y entrenada para hacer variedad de funciones, entre ellas las de administración, moderación y algunas de diversión o extra.
