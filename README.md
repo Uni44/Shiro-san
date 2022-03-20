@@ -16,3 +16,5 @@ Utiliza sh!help para la lista de comandos simple y sh!help2 para la lista avanza
 
 # Soporte
 Servidor de soporte directo: [LINK](https://discord.gg/BVQ9jAqmsC)
+
+Última actualización: 20 de marzo de 2022
