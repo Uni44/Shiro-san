@@ -9,3 +9,5 @@
 4. No se permiten actitudes de racismo, homofobia, sexismo o insultos a través del uso de la bot.
 
 5. Comenzar rumores sobre la bot o causar drama innecesario en nuestro servidor sobre la bot y miembros del staff es motivo de sanción.
+
+**Nos reservamos el derecho de remover el bot de los servidores. Además los términos y condiciones pueden modificarse sin aviso previo.**
